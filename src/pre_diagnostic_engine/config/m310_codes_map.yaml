@@ -1,0 +1,13 @@
+m310_opportunities:
+  subvencao:
+    code: "106"
+    score: 20
+  art30:
+    code: "106.05"
+    score: 20
+  credito_irpj:
+    code: "106.10"
+    score: 20
+  jcp_dedutivel:
+    code: "166.03"
+    score: 20

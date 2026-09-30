@@ -1,0 +1,42 @@
+# =============================================================================
+# Kafka Configuration — Dinamo ETL Platform
+# =============================================================================
+
+kafka:
+  bootstrap_servers: "kafka-1:9092,kafka-2:9092,kafka-3:9092"
+  schema_registry_url: "http://schema-registry:8081"
+  security_protocol: "PLAINTEXT"  # Change to SASL_SSL for production
+  compression_type: "lz4"
+
+  producer:
+    acks: "all"
+    enable_idempotence: true
+    linger_ms: 20
+    batch_size: 65536
+    buffer_memory: 67108864
+    max_request_size: 10485760
+    retries: 2147483647
+    max_in_flight: 5
+
+  consumer:
+    group_id: "dinamo-etl-consumer"
+    auto_offset_reset: "earliest"
+    enable_auto_commit: false
+    max_poll_records: 500
+    max_poll_interval_ms: 300000
+    session_timeout_ms: 45000
+    heartbeat_interval_ms: 15000
+
+  topics:
+    raw_ingest: "sped.raw.ingest"
+    parsed_bronze: "sped.parsed.bronze"
+    enriched_silver: "sped.enriched.silver"
+    analytics_gold: "sped.analytics.gold"
+    errors_dlq: "sped.errors.dlq"
+    retry: "sped.retry"
+
+  dlq:
+    max_retries: 5
+    base_backoff_sec: 1.0
+    max_backoff_sec: 60.0
+

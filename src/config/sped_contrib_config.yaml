@@ -1,0 +1,2286 @@
+gold_columns_order:
+  - REGISTROS
+  - IND_OPER
+  - IND_EMIT
+  - COD_SIT
+  - COD_PART
+  - CPF_PARTICIPANTE
+  - CNPJ_PARTICIPANTE
+  - NOME_PARTICIPANTE
+  - NUM_DOC
+  - SER
+  - SUB
+  - COD_MUN
+  - CHV_NFSE
+  - DT_DOC
+  - DT_E_S
+  - NUM_ITEM
+  - COD_ITEM
+  - DESCR_ITEM
+  - DESCR_COMPL
+  - TIPO_ITEM
+  - COD_BARRA
+  - COD_NCM
+  - CEST
+  - VL_OPR
+  - VL_ITEM
+  - VL_DESC
+  - QTD
+  - UNID
+  - IND_MOV
+  - CFOP
+  - DESCR_CFOP
+  - NAT_CFOP
+  - CST_ICMS
+  - VL_BC_ICMS
+  - VL_RED_BC
+  - ALIQ_ICMS
+  - VL_ICMS
+  - VL_BC_ICMS_ST
+  - ALIQ_ST
+  - VL_ICMS_ST
+  - CST_IPI
+  - VL_BC_IPI
+  - ALIQ_IPI
+  - VL_IPI
+  - CST_PIS
+  - VL_BC_PIS
+  - VL_PIS
+  - CST_COFINS
+  - VL_BC_COFINS
+  - ALIQ_COFINS
+  - VL_COFINS
+  - CRED_DEB_CBS_IBS
+
+# =========================================================
+# BLOCO C — MERCADORIAS
+# =========================================================
+
+
+# =========================================================
+# BLOCO A — SERVIÇOS
+# =========================================================
+# gold_contrib_servicos:
+#   name: CONTRIB_A100_A170
+#   registros: [ "0000", A100, A170 ]
+#   base_entity: A170
+#   entities:
+#     A170:
+#       source: A170
+#       uid: _row_id
+#       fields:
+#         - NUM_ITEM
+#         - COD_ITEM
+#         - DESCR_COMPL
+#         - VL_ITEM
+#         - VL_DESC
+#         - NAT_BC_CRED
+#         - IND_ORIG_CRED
+#         - CST_PIS
+#         - VL_BC_PIS_ITEM
+#         - ALIQ_PIS
+#         - VL_PIS_ITEM
+#         - CST_COFINS
+#         - VL_BC_COFINS_ITEM
+#         - ALIQ_COFINS
+#         - VL_COFINS_ITEM
+#         - COD_CTA
+#         - COD_CCUS
+#     A100:
+#       source: A100
+#       join_on: _parent_uid_final
+#       join_to: _row_id
+#       fields:
+#         - IND_OPER
+#         - IND_EMIT
+#         - COD_PART
+#         - COD_SIT
+#         - SER
+#         - SUB
+#         - NUM_DOC
+#         - CHV_NFSE
+#         - DT_DOC
+#         - DT_EXE_SERV
+#         - VL_DOC
+#         - IND_PGTO
+#         - VL_BC_PIS
+#         - VL_PIS
+#         - VL_BC_COFINS
+#         - VL_COFINS
+#         - VL_PIS_RET
+#         - VL_COFINS_RET
+#         - VL_ISS
+
+#     "0000":
+#       source: "0000"
+#       join_on: FILE_ID
+#       join_to: FILE_ID
+#       fields:
+#         - NOME
+#         - CNPJ
+#         - UF
+#         - DT_INI
+
+#     "0150":
+#       source: "0150"
+#       join_on: COD_PART
+#       join_to: COD_PART
+#       fields:
+#         - CNPJ_PARTICIPANTE
+#         - CPF_PARTICIPANTE
+#         - NOME_PARTICIPANTE
+#         - COD_MUN_PARTICIPANTE
+
+#   columns_order:
+#     - IND_OPER
+#     - IND_EMIT
+#     - COD_SIT
+#     - COD_PART
+#     # 0150
+#     - CNPJ_PARTICIPANTE
+#     - CPF_PARTICIPANTE
+#     - NOME_PARTICIPANTE
+#     - COD_MUN_PARTICIPANTE
+#     # A100
+#     - SER
+#     - SUB
+#     - NUM_DOC
+#     - CHV_NFSE
+#     - DT_DOC
+#     - DT_EXE_SERV
+#     - VL_DOC
+#     - IND_PGTO
+#     - VL_BC_PIS
+#     - VL_PIS
+#     - VL_BC_COFINS
+#     - VL_COFINS
+#     - VL_PIS_RET
+#     - VL_COFINS_RET
+#     - VL_ISS
+#     # A170
+#     - NUM_ITEM
+#     - COD_ITEM
+#     - DESCR_COMPL
+#     - VL_ITEM
+#     - VL_DESC
+#     - NAT_BC_CRED
+#     - IND_ORIG_CRED
+#     - CST_PIS
+#     - VL_BC_PIS_ITEM
+#     - ALIQ_PIS
+#     - VL_PIS_ITEM
+#     - CST_COFINS
+#     - VL_BC_COFINS_ITEM
+#     - ALIQ_COFINS
+#     - VL_COFINS_ITEM
+#     - COD_CTA
+#     - COD_CCUS
+
+#   reorder_columns_contrib_servicos:
+#     fields:
+#       - FILE_ID
+#       - OBRIG_ACESS
+#       - IND_OPER
+#       - IND_EMIT
+#       - COD_SIT
+#       - COD_PART
+#       - CNPJ_PARTICIPANTE
+#       - CPF_PARTICIPANTE
+#       - NOME_PARTICIPANTE
+#       - COD_MUN_PARTICIPANTE
+#       - SER
+#       - SUB
+#       - NUM_DOC
+#       - CHV_NFSE
+#       - DT_DOC
+#       - DT_EXE_SERV
+#       - VL_DOC
+#       - IND_PGTO
+#       - VL_BC_PIS
+#       - VL_PIS
+#       - VL_BC_COFINS
+#       - VL_COFINS
+#       - VL_PIS_RET
+#       - VL_COFINS_RET
+#       - VL_ISS
+#       # Itens
+#       - NUM_ITEM
+#       - COD_ITEM
+#       - DESCR_COMPL
+#       - VL_ITEM
+#       - VL_DESC
+#       - NAT_BC_CRED
+#       - IND_ORIG_CRED
+#       # PIS
+#       - CST_PIS
+#       - VL_BC_PIS_ITEM
+#       - ALIQ_PIS
+#       - VL_PIS_ITEM
+#       # COFINS
+#       - CST_COFINS
+#       - VL_BC_COFINS_ITEM
+#       - ALIQ_COFINS
+#       - VL_COFINS_ITEM
+#       # Contábil
+#       - COD_CTA
+#       - COD_CCUS
+#       - BASE_UID
+
+# # =========================================================
+# # BLOCO F — CRÉDITOS
+# # =========================================================
+# gold_contrib_creditos:
+#   name: CONTRIB_F100_F120_F130
+#   registros: [ "0000", F100, F120, F130 ]
+#   base_entity: F100
+
+#   entities:
+#     F120:
+#       source: F120
+#       uid: _row_id
+#       join_on: _parent_uid_final
+#       join_to: _row_id
+#       fields:
+#         - IDENT_BEM_IMOB
+#         - IND_UTIL_BEM_IMOB
+#         - VL_OPER_DEP
+#         - PARC_OPER_NAO_BC_CRED
+#         - DESC_BEM_IMOB
+
+#     F100:
+#       source: F100
+#       uid: _row_id
+#       join_on: _parent_uid_final
+#       join_to: _row_id
+#       fields:
+#         - IND_OPER
+#         - COD_PART
+#         - COD_ITEM
+#         - DT_OPER
+#         - VL_OPER
+#         - CST_PIS
+#         - VL_BC_PIS
+#         - ALIQ_PIS
+#         - VL_PIS
+#         - CST_COFINS
+#         - VL_BC_COFINS
+#         - ALIQ_COFINS
+#         - VL_COFINS
+#         - NAT_BC_CRED
+#         - IND_ORIG_CRED
+#         - COD_CTA
+#         - COD_CCUS
+#         - DESC_DOC_OPER
+#     F130:
+#       source: F130
+#       join_on: _parent_uid_final
+#       join_to: _row_id
+#       fields:
+#         - MES_OPER_AQUIS
+#         - VL_OPER_AQUIS
+#         - VL_BC_CRED
+#         - IND_NR_PARC
+
+#     "0000":
+#       source: "0000"
+#       join_on: FILE_ID
+#       join_to: FILE_ID
+#       fields:
+#         - NOME
+#         - CNPJ
+#         - UF
+#         - DT_INI
+
+#     "0150":
+#       source: "0150"
+#       join_on: COD_PART
+#       join_to: COD_PART
+#       fields:
+#         - CNPJ_PARTICIPANTE
+#         - CPF_PARTICIPANTE
+#         - NOME_PARTICIPANTE
+#         - COD_MUN_PARTICIPANTE
+
+#   reorder_columns_contrib_creditos:
+#     fields:
+#       - FILE_ID
+#       - OBRIG_ACESS
+#       - IND_OPER
+#       - COD_PART
+#       - CNPJ_PARTICIPANTE
+#       - CPF_PARTICIPANTE
+#       - NOME_PARTICIPANTE
+#       - COD_MUN_PARTICIPANTE
+#       - COD_ITEM
+#       - DT_OPER
+#       - DESC_DOC_OPER
+#       - VL_OPER
+#       - CST_PIS
+#       - VL_BC_PIS
+#       - ALIQ_PIS
+#       - VL_PIS
+#       - CST_COFINS
+#       - VL_BC_COFINS
+#       - ALIQ_COFINS
+#       - VL_COFINS
+#       - NAT_BC_CRED
+#       - IND_ORIG_CRED
+#       - IDENT_BEM_IMOB
+#       - IND_UTIL_BEM_IMOB
+#       - VL_OPER_DEP
+#       - PARC_OPER_NAO_BC_CRED
+#       - DESC_BEM_IMOB
+#       - MES_OPER_AQUIS
+#       - VL_OPER_AQUIS
+#       - VL_BC_CRED
+#       - IND_NR_PARC
+#       - COD_CTA
+#       - COD_CCUS
+#       - BASE_UID
+
+# =========================================================
+# BLOCO 0 — PLANO DE CONTAS
+# =========================================================
+
+parent_child_mapping_contrib:
+  # Nível 0: Abertura do Arquivo
+  - parent: "0000" # Nível 0
+    children:
+      [
+        "0001",
+        "0990",
+        "A001",
+        "A990",
+        "C001",
+        "C990",
+        "D001",
+        "D990",
+        "F001",
+        "F990",
+        "I001",
+        "I990",
+        "M001",
+        "M990",
+        "P001",
+        "P990",
+        "1001",
+        "1990",
+        "9001",
+        "9990",
+        "9999",
+        "0140",
+        "0150",
+      ] # [1, 2]
+
+  # Bloco 0: Abertura e Identificação
+  - parent: "0001" # Nível 1
+    children: [ "0035", "0100", "0110", "0120", "0140", "0500", "0600", "0900" ] # [3-6]
+  - parent: "0110"
+    children: [ "0111" ] # [4]
+  - parent: "0140"
+    children: [ "0145", "0150", "0190", "0200", "0400", "0450" ] # [4, 5]
+  - parent: "0200"
+    children: [ "0205", "0206", "0208" ] # [5, 6]
+
+  # Bloco A: Documentos Fiscais - Serviços (ISS)
+  - parent: "A001"
+    children: [ "A010" ] # [7]
+  - parent: "A010"
+    children: [ "A100" ] # [7]
+  - parent: "A100"
+    children: [ "A110", "A111", "A120", "A170" ] # [7, 8]
+
+  # Bloco C: Documentos Fiscais - Mercadorias
+  - parent: "C001"
+    children: [ "C010" ] # [8]
+  - parent: "C010"
+    children:
+      [
+        "C100",
+        "C180",
+        "C170",
+        "C190",
+        "C380",
+        "C395",
+        "C400",
+        "C490",
+        "C600",
+        "C800",
+        "C860",
+      ] # [9-13]
+  - parent: "C100"
+    children: [ "C110", "C111", "C120", "C170", "C175" ] # [9, 14]
+  - parent: "C180"
+    children: [ "C181", "C185" ] # [9, 10]
+  - parent: "C181"
+    children: [ "C188" ] # [10]
+  - parent: "C185"
+    children: [ "C188" ] # [10]
+  - parent: "C190"
+    children: [ "C191", "C195", "C198", "C199" ] # [10, 11]
+  - parent: "C380"
+    children: [ "C381", "C385" ] # [11]
+  - parent: "C395"
+    children: [ "C396" ] # [12]
+  - parent: "C400"
+    children: [ "C405", "C489" ] # [12, 15]
+  - parent: "C405"
+    children: [ "C481", "C485" ] # [12]
+  - parent: "C490"
+    children: [ "C491", "C495", "C499" ] # [12, 13]
+  - parent: "C600"
+    children: [ "C601", "C605", "C609" ] # [13]
+  - parent: "C800"
+    children: [ "C810", "C820", "C830" ] # [16, 17]
+  - parent: "C860"
+    children: [ "C870", "C880", "C890" ] # [17, 18]
+
+  # Bloco D: Documentos Fiscais - Serviços (Transporte e Comunicação)
+  - parent: "D001"
+    children: [ "D010" ] # [19]
+  - parent: "D010"
+    children: [ "D100", "D200", "D300", "D350", "D500", "D600" ] # [19-22]
+  - parent: "D100"
+    children: [ "D101", "D105", "D111" ] # [19]
+  - parent: "D200"
+    children: [ "D201", "D205", "D209" ] # [20]
+  - parent: "D300"
+    children: [ "D309" ] # [20]
+  - parent: "D350"
+    children: [ "D359" ] # [21]
+  - parent: "D500"
+    children: [ "D501", "D505", "D509" ] # [21]
+  - parent: "D600"
+    children: [ "D601", "D605", "D609" ] # [22]
+
+  # Bloco F: Demais Documentos e Operações
+  - parent: "F001"
+    children: [ "F010" ] # [23]
+  - parent: "F010"
+    children:
+      [
+        "F100",
+        "F120",
+        "F130",
+        "F150",
+        "F200",
+        "F205",
+        "F210",
+        "F500",
+        "F510",
+        "F525",
+        "F550",
+        "F560",
+        "F600",
+        "F700",
+        "F800",
+      ] # [23-27]
+  - parent: "F100"
+    children: [ "F111" ] # [23]
+  - parent: "F120"
+    children: [ "F129" ] # [23]
+  - parent: "F130"
+    children: [ "F139" ] # [24]
+  - parent: "F210"
+    children: [ "F211" ] # [25]
+  - parent: "F500"
+    children: [ "F509" ] # [25]
+  - parent: "F510"
+    children: [ "F519" ] # [25]
+  - parent: "F550"
+    children: [ "F559" ] # [26]
+  - parent: "F560"
+    children: [ "F569" ] # [27]
+
+  # Bloco I: Instituições Financeiras e Assemelhadas
+  - parent: "I001"
+    children: [ "I010" ] # [28]
+  - parent: "I010"
+    children: [ "I100" ] # [28]
+  - parent: "I100"
+    children: [ "I199", "I200" ] # [28, 29]
+  - parent: "I200"
+    children: [ "I299", "I300" ] # [29]
+  - parent: "I300"
+    children: [ "I399" ] # [29]
+
+  # Bloco M: Apuração da Contribuição e Crédito (PIS/COFINS)
+  - parent: "M001"
+    children:
+      [
+        "M100",
+        "M200",
+        "M300",
+        "M350",
+        "M400",
+        "M500",
+        "M600",
+        "M700",
+        "M800",
+      ] # [30-34]
+  - parent: "M100"
+    children: [ "M105", "M110" ] # [30]
+  - parent: "M110"
+    children: [ "M115" ] # [30]
+  - parent: "M200"
+    children: [ "M205", "M210" ] # [31]
+  - parent: "M210"
+    children: [ "M211", "M215", "M220", "M230" ] # [31, 32]
+  - parent: "M220"
+    children: [ "M225" ] # [35]
+  - parent: "M400"
+    children: [ "M410" ] # [33]
+  - parent: "M500"
+    children: [ "M505", "M510" ] # [33, 36]
+  - parent: "M510"
+    children: [ "M515" ] # [37]
+  - parent: "M600"
+    children: [ "M605", "M610" ] # [34]
+  - parent: "M610"
+    children: [ "M611", "M615", "M620", "M630" ] # [34, 38-46]
+  - parent: "M620"
+    children: [ "M625" ] # [34]
+  - parent: "M800"
+    children: [ "M810" ] # [34]
+
+  # Bloco P: Apuração da CPRB
+  - parent: "P001"
+    children: [ "P010" ] # [47]
+  - parent: "P010"
+    children: [ "P100", "P200" ] # [47]
+  - parent: "P100"
+    children: [ "P110", "P199" ] # [47]
+  - parent: "P200"
+    children: [ "P210" ] # [48]
+
+  # Bloco 1: Complemento da Escrituração
+  - parent: "1001"
+    children:
+      [
+        "1010",
+        "1020",
+        "1050",
+        "1100",
+        "1200",
+        "1300",
+        "1500",
+        "1600",
+        "1700",
+        "1800",
+        "1900",
+      ] # [15, 49-51]
+  - parent: "1010"
+    children: [ "1011" ] # [49]
+  - parent: "1100"
+    children: [ "1101" ] # [49]
+  - parent: "1101"
+    children: [ "1102" ] # [15]
+  - parent: "1200"
+    children: [ "1210", "1220" ] # [15]
+  - parent: "1500"
+    children: [ "1501" ] # [50]
+  - parent: "1501"
+    children: [ "1502" ] # [50]
+  - parent: "1600"
+    children: [ "1610", "1620" ] # [50, 51]
+  - parent: "1800"
+    children: [ "1809" ] # [51]
+
+  # Bloco 9: Controle e Encerramento
+  - parent: "9001"
+    children: [ "9900" ] # [52]
+
+
+inheritance_fields:
+  C170:
+    from: C100
+    fields: []
+
+# config.yaml (estrutura esperada pelo código)
+regime_tributario:
+  bucket_name: "datafoundation-agtax-evollux-prd"
+  path: "REGIME_TRIBUTARIO/"
+
+# Tabela CFOP
+tabela_cfop:
+  bucket_name: "datafoundation-agtax-evollux-prd"
+  path: "TABELA_CFOP/"
+
+# Arquivo JSON com os registros e seus pais mapeados
+identify_parents:
+  path: "./dinamo_etl_project/identify_parents.json"
+
+# Adaptado para o novo formato
+CONTRIB_0000_M200_M205_M210_M220:
+  name: CONTRIB_0000_M200_M205_M210_M220
+  enabled: true
+  base_entity: M200
+  entities:
+    M200:
+      source: M200
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields:
+        [
+          VL_TOT_CONT_NC_PER,
+          VL_TOT_CRED_DESC,
+          VL_TOT_CRED_DESC_ANT,
+          VL_TOT_CONT_NC_DEV,
+          VL_RET_NC,
+          VL_OUT_DED_NC,
+          VL_CONT_NC_REC,
+          VL_TOT_CONT_CUM_PER,
+          VL_RET_CUM,
+          VL_OUT_DED_CUM,
+          VL_CONT_CUM_REC,
+          VL_TOT_CONT_REC,
+        ]
+
+    M205:
+      source: M205
+      join_on: M200
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: [ NUM_CAMPO, COD_REC, VL_DEBITO ]
+
+    M210:
+      source: M210
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M200
+      fields:
+        [
+          COD_CONT,
+          VL_REC_BRT,
+          VL_BC_CONT,
+          ALIQ_PIS,
+          QUANT_BC_PIS,
+          ALIQ_PIS_QUANT,
+          VL_CONT_APUR,
+          VL_AJUS_ACRES,
+          VL_AJUS_REDUC,
+          VL_CONT_DIFER,
+          VL_CONT_DIFER_ANT,
+          VL_CONT_PER,
+        ]
+    M220:
+      source: M220
+      join_on: M200
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: [ IND_AJ, VL_AJ, COD_AJ, NUM_DOC, DESCR_AJ, DT_REF ]
+
+CONTRIB_0000_0500:
+  name: CONTRIB_0000_0500
+  enabled: true
+  base_entity: "0500"
+  entities:
+    "0500":
+      source: "0500"
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields:
+        [
+          DT_ALT,
+          COD_NAT_CC,
+          IND_CTA,
+          NIVEL,
+          COD_CTA,
+          NOME_CTA,
+          COD_CTA_REF,
+          CNPJ_EST,
+        ]
+
+# Adaptado para o novo formato
+CONTRIB_0000_1100:
+  name: CONTRIB_0000_1100
+  enabled: true
+  base_entity: "1100"
+  entities:
+    "1100":
+      source: "1100"
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields:
+        [
+          PER_APU_CRED,
+          ORIG_CRED,
+          CNPJ_SUC,
+          COD_CRED,
+          VL_CRED_APU,
+          VL_CRED_EXT_APU,
+          VL_TOT_CRED_APU,
+          VL_CRED_DESC_PA_ANT,
+          VL_CRED_PER_PA_ANT,
+          VL_CRED_DCOMP_PA_ANT,
+          SD_CRED_DISP_EFD,
+          VL_CRED_DESC_EFD,
+          VL_CRED_PER_EFD,
+          VL_CRED_DCOMP_EFD,
+          VL_CRED_TRANS,
+          VL_CRED_OUT,
+          SLD_CRED_FIM,
+        ]
+
+CONTRIB_0000_1300:
+  name: CONTRIB_0000_1300
+  enabled: true
+  base_entity: "1300"
+  entities:
+    "1300":
+      source: "1300"
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields:
+        [
+          IND_NAT_RET,
+          PR_REC_RET,
+          VL_RET_APU,
+          VL_RET_DED,
+          VL_RET_PER,
+          VL_RET_DCOMP,
+          SLD_RET,
+        ]
+
+CONTRIB_0000_1500:
+  name: CONTRIB_0000_1500
+  enabled: true
+  base_entity: "1500"
+  entities:
+    "1500":
+      source: "1500"
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields:
+        [
+          PER_APU_CRED,
+          ORIG_CRED,
+          CNPJ_SUC,
+          COD_CRED,
+          VL_CRED_APU,
+          VL_CRED_EXT_APU,
+          VL_TOT_CRED_APU,
+          VL_CRED_DESC_PA_ANT,
+          VL_CRED_PER_PA_ANT,
+          VL_CRED_DCOMP_PA_ANT,
+          SD_CRED_DISP_EFD,
+          VL_CRED_DESC_EFD,
+          VL_CRED_PER_EFD,
+          VL_CRED_DCOMP_EFD,
+          VL_CRED_TRANS,
+          VL_CRED_OUT,
+          SLD_CRED_FIM,
+        ]
+
+CONTRIB_0000_1700:
+  name: CONTRIB_0000_1700
+  enabled: true
+  base_entity: "1700"
+  entities:
+    "1700":
+      source: "1700"
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields:
+        [
+          IND_NAT_RET,
+          PR_REC_RET,
+          VL_RET_APU,
+          VL_RET_DED,
+          VL_RET_PER,
+          VL_RET_DCOMP,
+          SLD_RET,
+        ]
+
+CONTRIB_0000_M205:
+  name: CONTRIB_0000_M205
+  enabled: true
+  base_entity: M205
+  entities:
+    M200:
+      source: M200
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: []
+    M205:
+      source: M205
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M200
+      fields: [ NUM_CAMPO, COD_REC, VL_DEBITO ]
+
+CONTRIB_0000_M210:
+  name: CONTRIB_0000_M210
+  enabled: true
+  base_entity: M210
+  entities:
+    M200:
+      source: M200
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: []
+    M210:
+      source: M210
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M200
+      fields:
+        [
+          COD_CONT,
+          VL_REC_BRT,
+          VL_BC_CONT,
+          ALIQ_PIS,
+          QUANT_BC_PIS,
+          ALIQ_PIS_QUANT,
+          VL_CONT_APUR,
+          VL_AJUS_ACRES,
+          VL_AJUS_REDUC,
+          VL_CONT_DIFER,
+          VL_CONT_DIFER_ANT,
+          VL_CONT_PER,
+        ]
+
+CONTRIB_0000_M410:
+  name: CONTRIB_0000_M410
+  enabled: true
+  base_entity: M410
+  entities:
+    M400:
+      source: M400
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: []
+    M410:
+      source: M410
+      uid: _row_id
+      parent_uid: _parent_uid
+      join_on: M400
+      fields: [ NAT_REC, VL_REC, COD_CTA, DESC_COMPL ]
+
+CONTRIB_0000_M400:
+  name: CONTRIB_0000_M400
+  enabled: true
+  base_entity: M400
+  entities:
+    M400:
+      source: M400
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: [ CST_PIS, VL_TOT_REC, COD_CTA, DESC_COMPL ]
+
+CONTRIB_0000_M500:
+  name: CONTRIB_0000_M500
+  enabled: true
+  base_entity: M500
+  entities:
+    M500:
+      source: M500
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields:
+        [
+          COD_CRED,
+          IND_CRED_ORI,
+          VL_BC_COFINS,
+          ALIQ_COFINS,
+          QUANT_BC_COFINS,
+          ALIQ_COFINS_QUANT,
+          VL_CRED,
+          VL_AJUS_ACRES,
+          VL_AJUS_REDUC,
+          VL_CRED_DIF,
+          VL_CRED_DISP,
+          IND_DESC_CRED,
+          VL_CRED_DESC,
+          SLD_CRED,
+        ]
+
+CONTRIB_0000_M505:
+  name: CONTRIB_0000_M505
+  enabled: true
+  base_entity: M505
+  entities:
+    M500:
+      source: M500
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: []
+    M505:
+      source: M505
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M500
+      fields:
+        [
+          NAT_BC_CRED,
+          CST_COFINS,
+          VL_BC_COFINS_TOT,
+          VL_BC_COFINS_CUM,
+          VL_BC_COFINS_NC,
+          VL_BC_COFINS,
+          QUANT_BC_COFINS_TOT,
+          QUANT_BC_COFINS,
+          DESC_CRED,
+        ]
+
+CONTRIB_0000_M510:
+  name: CONTRIB_0000_M510
+  enabled: true
+  base_entity: M510
+  entities:
+    M500:
+      source: M500
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: []
+    M510:
+      source: M510
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M500
+      fields: [ IND_AJ, VL_AJ, COD_AJ, NUM_DOC, DESCR_AJ, DT_REF ]
+
+CONTRIB_0000_M515:
+  name: CONTRIB_0000_M515
+  enabled: true
+  base_entity: M515
+  entities:
+    M500:
+      source: M500
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: []
+    M515:
+      source: M515
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M500
+      fields:
+        [
+          DET_VALOR_AJ,
+          CST_COFINS,
+          DET_BC_CRED,
+          DET_ALIQ,
+          DT_OPER_AJ,
+          DESC_AJ,
+          COD_CTA,
+          INFO_COMPL,
+        ]
+
+CONTRIB_0000_M600:
+  name: CONTRIB_0000_M600
+  enabled: true
+  base_entity: M600
+  entities:
+    M600:
+      source: M600
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields:
+        [
+          VL_TOT_CRED_DESC,
+          VL_TOT_CRED_DESC_ANT,
+          VL_TOT_CONT_NC_DEV,
+          VL_RET_NC,
+          VL_OUT_DED_NC,
+          VL_CONT_NC_REC,
+          VL_TOT_CONT_CUM_PER,
+          VL_RET_CUM,
+          VL_OUT_DED_CUM,
+          VL_CONT_CUM_REC,
+          VL_TOT_CONT_REC,
+        ]
+
+CONTRIB_0000_M605:
+  name: CONTRIB_0000_M605
+  enabled: true
+  base_entity: M605
+  entities:
+    M600:
+      source: M600
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: []
+    M605:
+      source: M605
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M600
+      fields: [ NUM_CAMPO, COD_REC, VL_DEBITO ]
+
+CONTRIB_0000_M610:
+  name: CONTRIB_0000_M610
+  enabled: true
+  base_entity: M610
+  entities:
+    M600:
+      source: M600
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: []
+    M610:
+      source: M610
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M600
+      fields:
+        [
+          COD_CONT,
+          VL_REC_BRT,
+          VL_BC_CONT,
+          ALIQ_COFINS,
+          QUANT_BC_COFINS,
+          ALIQ_COFINS_QUANT,
+          VL_CONT_APUR,
+          VL_AJUS_ACRES,
+          VL_AJUS_REDUC,
+          VL_CONT_DIFER,
+          VL_CONT_DIFER_ANT,
+          VL_CONT_PER,
+        ]
+
+CONTRIB_0000_M620:
+  name: CONTRIB_0000_M620
+  enabled: true
+  base_entity: M620
+  entities:
+    M600:
+      source: M600
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: []
+    M620:
+      source: M620
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M600
+      fields: [ IND_AJ, VL_AJ, COD_AJ, NUM_DOC, DESCR_AJ, DT_REF ]
+
+CONTRIB_0000_0110:
+  name: CONTRIB_0000_0110
+  enabled: true
+  base_entity: "0110"
+  entities:
+    "0110":
+      source: "0110"
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: [ COD_INC_TRIB, IND_APRO_CRED, COD_TIPO_CONT, IND_REG_CUM ]
+
+CONTRIB_0000_F010_F100:
+  name: CONTRIB_0000_F010_F100
+  enabled: true
+  base_entity: F010
+  entities:
+    F010:
+      source: F010
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: [ CNPJ_F010 ]
+    F100:
+      source: F100
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: F010
+      fields:
+        [
+          IND_OPER,
+          COD_PART,
+          COD_ITEM,
+          DT_OPER,
+          VL_OPER,
+          CST_PIS,
+          VL_BC_PIS,
+          ALIQ_PIS,
+          VL_PIS,
+          CST_COFINS,
+          VL_BC_COFINS,
+          ALIQ_COFINS,
+          VL_COFINS,
+          NAT_BC_CRED,
+          IND_ORIG_CRED,
+          COD_CTA,
+          COD_CCUS,
+          DESC_DOC_OPER,
+        ]
+
+CONTRIB_0000_F010_F120:
+  name: CONTRIB_0000_F010_F120
+  enabled: true
+  base_entity: F010
+  entities:
+    F010:
+      source: F010
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: [ CNPJ_F010 ]
+    F120:
+      source: F120
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: F010
+      fields:
+        [
+          NAT_BC_CRED,
+          IDENT_BEM_IMOB,
+          IND_ORIG_CRED,
+          IND_UTIL_BEM_IMOB,
+          VL_OPER_DEP,
+          PARC_OPER_NAO_BC_CRED,
+          CST_PIS,
+          VL_BC_PIS,
+          ALIQ_PIS,
+          VL_PIS,
+          CST_COFINS,
+          VL_BC_COFINS,
+          ALIQ_COFINS,
+          VL_COFINS,
+          COD_CTA,
+          COD_CCUS,
+          DESC_BEM_IMOB,
+        ]
+
+CONTRIB_0000_F010_F130:
+  name: CONTRIB_0000_F010_F130
+  enabled: true
+  base_entity: F010
+  entities:
+    F010:
+      source: F010
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: [ CNPJ_F010 ]
+    F130:
+      source: F130
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: F010
+      fields:
+        [
+          NAT_BC_CRED,
+          IDENT_BEM_IMOB,
+          IND_ORIG_CRED,
+          IND_UTIL_BEM_IMOB,
+          MES_OPER_AQUIS,
+          VL_OPER_AQUIS,
+          PARC_OPER_NAO_BC_CRED,
+          VL_BC_CRED,
+          IND_NR_PARC,
+          CST_PIS,
+          VL_BC_PIS,
+          ALIQ_PIS,
+          VL_PIS,
+          CST_COFINS,
+          VL_BC_COFINS,
+          ALIQ_COFINS,
+          VL_COFINS,
+          COD_CTA,
+          COD_CCUS,
+          DESC_BEM_IMOB,
+        ]
+
+CONTRIB_0000_F010_F600:
+  name: CONTRIB_0000_F010_F600
+  enabled: true
+  base_entity: F010
+  entities:
+    F010:
+      source: F010
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: [ CNPJ_F010 ]
+    F600:
+      source: F600
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: F010
+      fields:
+        [
+          IND_NAT_RET,
+          DT_RET,
+          VL_BC_RET,
+          VL_RET,
+          COD_REC,
+          IND_NAT_REC,
+          { CNPJ: CNPJ_F600 },
+          VL_RET_PIS,
+          VL_RET_COFINS,
+          IND_DEC,
+        ]
+
+CONTRIB_0000_M400_M410:
+  name: CONTRIB_0000_M400_M410
+  enabled: true
+  base_entity: M410
+  entities:
+    M400:
+      source: M400
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: [ CST_PIS, VL_TOT_REC ]
+    M410:
+      source: M410
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M400
+      fields: [ NAT_REC, VL_REC, COD_CTA, DESC_COMPL ]
+
+CONTRIB_0000_M500_M505_M510_M515:
+  name: CONTRIB_0000_M500_M505_M510_M515
+  enabled: true
+  base_entity: M500
+  entities:
+    M500:
+      source: M500
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields:
+        [
+          COD_CRED,
+          IND_CRED_ORI,
+          VL_BC_COFINS,
+          ALIQ_COFINS,
+          QUANT_BC_COFINS,
+          ALIQ_COFINS_QUANT,
+          VL_CRED,
+          VL_AJUS_ACRES,
+          VL_AJUS_REDUC,
+          VL_CRED_DIFER,
+          VL_CRED_DISP,
+          IND_DESC_CRED,
+          VL_CRED_DESC,
+          SLD_CRED,
+        ]
+    M505:
+      source: M505
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M500
+      fields:
+        [
+          NAT_BC_CRED,
+          { CST_COFINS: CST_COFINS_M505 },
+          VL_BC_COFINS_TOT,
+          VL_BC_COFINS_CUM,
+          VL_BC_COFINS_NC,
+          { VL_BC_COFINS: VL_BC_COFINS_M505 },
+          QUANT_BC_COFINS_TOT,
+          { QUANT_BC_COFINS: QUANT_BC_COFINS_M505 },
+          DESC_CRED,
+        ]
+    M510:
+      source: M510
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M500
+      fields: [ IND_AJ, VL_AJ, COD_AJ, NUM_DOC, DESCR_AJ, DT_REF ]
+    M515:
+      source: M515
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M510
+      fields:
+        [
+          DET_VALOR_AJ,
+          { CST_COFINS: CST_COFINS_M515 },
+          DET_BC_CRED,
+          DET_ALIQ,
+          DT_OPER_AJ,
+          DESC_AJ,
+          COD_CTA,
+          INFO_COMPL,
+        ]
+
+CONTRIB_0000_M100_M105_M110_M115:
+  name: CONTRIB_0000_M100_M105_M110_M115
+  enabled: true
+  base_entity: M100
+  entities:
+    M100:
+      source: M100
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields:
+        [
+          COD_CRED,
+          IND_CRED_ORI,
+          ALIQ_PIS_QUANT,
+          ALIQ_PIS,
+          VL_CRED,
+          VL_AJUS_ACRES,
+          VL_AJUS_REDUC,
+          VL_CRED_DIF,
+          VL_CRED_DISP,
+          IND_DESC_CRED,
+          VL_CRED_DESC,
+          VL_BC_PIS,
+          QUANT_BC_PIS,
+          SLD_CRED,
+        ]
+    M105:
+      source: M105
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M100
+      fields:
+        [
+          { VL_BC_PIS: VL_BC_PIS_M105 },
+          { QUANT_BC_PIS: QUANT_BC_PIS_M105 },
+          NAT_BC_CRED,
+          CST_PIS,
+          VL_BC_PIS_TOT,
+          VL_BC_PIS_CUM,
+          VL_BC_PIS_NC,
+          QUANT_BC_PIS_TOT,
+          DESC_CRED,
+        ]
+    M110:
+      source: M110
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M100
+      fields: [ IND_AJ, VL_AJ, COD_AJ, NUM_DOC, DESCR_AJ, DT_REF ]
+    M115:
+      source: M115
+      parent_uid: _parent_uid_final
+      join_on: M110
+      fields:
+        [
+          DET_VALOR_AJ,
+          CST_PIS_M115,
+          DET_BC_CRED,
+          DET_ALIQ,
+          REG_FIX_M115,
+          DT_OPER_AJ,
+          DESC_AJ,
+          COD_CTA,
+          INFO_COMPL,
+        ]
+
+CONTRIB_0000_M800_M810:
+  name: CONTRIB_0000_M800_M810
+  enabled: true
+  base_entity: M810
+  entities:
+    M800:
+      source: M800
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: [ CST_COFINS, VL_TOT_REC, COD_CTA, DESC_COMPL ]
+    M810:
+      source: M810
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M800
+      fields: [ NAT_REC, VL_REC, { COD_CTA: COD_CTA_M810 }, DESC_COMPL_M810 ]
+
+CONTRIB_0000_M600_M605_M610_M620:
+  name: CONTRIB_0000_M600_M605_M610_M620
+  base_entity: M600
+  entities:
+    M600:
+      source: M600
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields:
+        [
+          VL_TOT_CRED_DESC,
+          VL_TOT_CRED_DESC_ANT,
+          VL_TOT_CONT_NC_DEV,
+          VL_RET_NC,
+          VL_OUT_DED_NC,
+          VL_CONT_NC_REC,
+          VL_TOT_CONT_CUM_PER,
+          VL_RET_CUM,
+          VL_OUT_DED_CUM,
+          VL_CONT_CUM_REC,
+          VL_TOT_CONT_REC,
+        ]
+
+    M605:
+      source: M605
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M600
+      fields: [ NUM_CAMPO, COD_REC, VL_DEBITO ]
+    M610:
+      source: M610
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M600
+      fields:
+        [
+          COD_CONT,
+          VL_REC_BRT,
+          VL_BC_CONT,
+          ALIQ_COFINS,
+          QUANT_BC_COFINS,
+          ALIQ_COFINS_QUANT,
+          VL_CONT_APUR,
+          VL_AJUS_ACRES,
+          VL_AJUS_REDUC,
+          VL_CONT_DIFER,
+          VL_CONT_DIFER_ANT,
+          VL_CONT_PER,
+        ]
+    M620:
+      source: M620
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M600
+      fields: [ IND_AJ, VL_AJ, COD_AJ, NUM_DOC, DESCR_AJ, DT_REF ]
+
+CONTRIB_0000_0140_0150:
+  name: CONTRIB_0000_0140_0150
+  enabled: true
+  base_entity: "0150"
+  entities:
+    "0140":
+      source: "0140"
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields:
+        [
+          COD_ESTABELECIMENTO,
+          NOME_ESTABELECIMENTO,
+          CNPJ_ESTABELECIMENTO,
+          UF_ESTABELECIMENTO,
+          IE_ESTABELECIMENTO,
+          COD_MUN_ESTABELECIMENTO,
+          IM_ESTABELECIMENTO,
+          SUFRAMA_ESTABELECIMENTO,
+        ]
+
+    "0150":
+      source: "0150"
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: "0140"
+      fields:
+        [
+          COD_PART,
+          NOME_PARTICIPANTE,
+          COD_PAIS,
+          CNPJ_PARTICIPANTE,
+          CPF_PARTICIPANTE,
+          IE_PARTICIPANTE,
+          COD_MUN_PARTICIPANTE,
+          SUFRAMA_PARTICIPANTE,
+          END_PARTICIPANTE,
+          NUM_PARTICIPANTE,
+          COMPL_PARTICIPANTE,
+          BAIRRO_PARTICIPANTE,
+        ]
+
+CONTRIB_0000_0140_0200:
+  name: CONTRIB_0000_0140_0200
+  enabled: true
+  base_entity: "0200"
+  entities:
+    "0140":
+      source: "0140"
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields:
+        [
+          COD_ESTABELECIMENTO,
+          NOME_ESTABELECIMENTO,
+          CNPJ_ESTABELECIMENTO,
+          UF_ESTABELECIMENTO,
+          IE_ESTABELECIMENTO,
+          COD_MUN_ESTABELECIMENTO,
+          IM_ESTABELECIMENTO,
+          SUFRAMA_ESTABELECIMENTO,
+        ]
+    "0200":
+      source: "0200"
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: "0140"
+      fields:
+        [
+          COD_ITEM,
+          DESCR_ITEM,
+          COD_BARRA,
+          COD_ANT_ITEM,
+          UNID_INV,
+          TIPO_ITEM,
+          COD_NCM,
+          EX_IPI,
+          COD_GEN,
+          COD_LST,
+          ALIQ_ICMS,
+        ]
+
+CONTRIB_0000_C010_C190_C191_C195: # verificar
+  name: CONTRIB_0000_C010_C190_C191_C195
+  enabled: true
+  base_entity: C010
+  entities:
+    C010:
+      source: C010
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: [ CNPJ_C010, IND_ESCRI ]
+    C190:
+      source: C190
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: C010
+      fields:
+        [
+          { CFOP: CFOP_C190 },
+          ALIQ_ICMS,
+          VL_OPR,
+          VL_BC_ICMS,
+          VL_ICMS_TOTAL,
+          VL_BC_ICMS_ST,
+          VL_ICMS_ST,
+          VL_RED_BC,
+          VL_IPI,
+          COD_OBS,
+        ]
+    C191:
+      source: C191
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: C010
+      fields:
+        [
+          { CNPJ_CPF_PART: CNPJ_CPF_PART_C191 },
+          CST_PIS,
+          { CFOP: CFOP_C191 },
+          { VL_ITEM: VL_ITEM_C191 },
+          { VL_DESC: VL_DESC_C191 },
+          VL_BC_PIS,
+          VL_PIS,
+          ALIQ_PIS,
+          ALIQ_PIS_QUANT,
+          QUANT_BC_PIS,
+          { COD_CTA: COD_CTA_C191 },
+        ]
+    C195:
+      source: C195
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: C010
+      fields:
+        [
+          { CNPJ_CPF_PART: CNPJ_CPF_PART_C195 },
+          CST_COFINS,
+          { CFOP: CFOP_C195 },
+          { VL_ITEM: VL_ITEM_C195 },
+          { VL_DESC: VL_DESC_C195 },
+          VL_BC_COFINS,
+          ALIQ_COFINS,
+          QUANT_BC_COFINS,
+          ALIQ_COFINS_QUANT,
+          VL_COFINS,
+          { COD_CTA: COD_CTA_C195 },
+        ]
+
+CONTRIB_0000_C010_C180_C181_C185: # verificar
+  name: CONTRIB_0000_C010_C180_C181_C185
+  enabled: true
+  base_entity: C010
+  entities:
+    C010:
+      source: C010
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: [ CNPJ_C010, IND_ESCRI ]
+    C180:
+      source: C180
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: C010
+      fields:
+        [
+          COD_MOD,
+          DT_DOC_INI,
+          DT_DOC_FIN,
+          COD_ITEM,
+          COD_NCM,
+          EX_IPI,
+          VL_TOT_ITEM,
+        ]
+    C181:
+      source: C181
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: C010
+      fields:
+        [
+          CST_PIS,
+          { CFOP: CFOP_PIS },
+          { VL_ITEM: VL_ITEM_PIS },
+          { VL_DESC: VL_DESC_PIS },
+          VL_BC_PIS,
+          ALIQ_PIS,
+        ]
+    C185:
+      source: C185
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: C010
+      fields:
+        [
+          CST_COFINS,
+          { CFOP: CFOP_COFINS },
+          { VL_ITEM: VL_ITEM_COFINS },
+          { VL_DESC: VL_DESC_COFINS },
+          VL_BC_COFINS,
+          ALIQ_COFINS,
+        ]
+
+CONTRIB_0000_D010_D100_D101_D105: # verificar
+  name: CONTRIB_0000_D010_D100_D101_D105
+  enabled: true
+  base_entity: D010
+  entities:
+    D010:
+      source: D010
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: [ CNPJ_D010 ]
+    D100:
+      source: D100
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: D010
+      fields:
+        [
+          IND_OPER,
+          IND_EMIT,
+          COD_PART,
+          COD_MOD,
+          COD_SIT,
+          SER,
+          SUB,
+          NUM_DOC,
+          CHV_CTE,
+          DT_DOC,
+          DT_A_P,
+          TP_CT_E,
+          CHV_CTE_REF,
+          VL_DOC,
+          VL_DESC,
+          IND_FRT,
+          VL_SERV,
+          VL_BC_ICMS,
+          VL_ICMS,
+          VL_NT,
+          COD_INF,
+          COD_CTA,
+        ]
+    D101:
+      source: D101
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: D010
+      fields:
+        [
+          IND_NAT_FRT_PIS,
+          VL_ITEM_PIS,
+          CST_PIS,
+          NAT_BC_CRED_PIS,
+          VL_BC_PIS,
+          ALIQ_PIS,
+          VL_PIS,
+          COD_CTA_PIS,
+        ]
+    D105:
+      source: D105
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: D010
+      fields:
+        [
+          IND_NAT_FRT_COFINS,
+          VL_ITEM_COFINS,
+          CST_COFINS,
+          NAT_BC_CRED_COFINS,
+          VL_BC_COFINS,
+          ALIQ_COFINS,
+          VL_COFINS,
+          COD_CTA_COFINS,
+        ]
+
+CONTRIB_0000_A010_A100_A170: # verificar
+  name: CONTRIB_0000_A010_A100_A170
+  enabled: true
+  base_entity: A010
+  entities:
+    A010:
+      source: A010
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: [ CNPJ_A010 ]
+    A100:
+      source: A100
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: A010 # pai direto de A100
+      fields:
+        [
+          IND_OPER,
+          IND_EMIT,
+          COD_PART,
+          COD_SIT,
+          SER,
+          SUB,
+          NUM_DOC,
+          CHV_NFSE,
+          DT_DOC,
+          DT_EXE_SERV,
+          VL_DOC,
+          IND_PGTO,
+          VL_DESC,
+          VL_BC_PIS,
+          VL_PIS,
+          VL_BC_COFINS,
+          VL_COFINS,
+          VL_PIS_RET,
+          VL_COFINS_RET,
+          VL_ISS,
+        ]
+    A170:
+      source: A170
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: A100 # pai direto de A170
+      fields:
+        [
+          NUM_ITEM,
+          COD_ITEM,
+          DESCR_COMPL,
+          VL_ITEM,
+          { VL_DESC: VL_DESC_ITEM },
+          NAT_BC_CRED,
+          IND_ORIG_CRED,
+          CST_PIS,
+          VL_BC_PIS_ITEM,
+          ALIQ_PIS,
+          VL_PIS_ITEM,
+          CST_COFINS,
+          VL_BC_COFINS_ITEM,
+          ALIQ_COFINS,
+          VL_COFINS_ITEM,
+          COD_CTA,
+        ]
+
+CONTRIB_0000_F010_F550: # verificar
+  name: CONTRIB_0000_F010_F550
+  enabled: true
+  base_entity: F010
+  entities:
+
+    F010:
+      source: F010
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: [ CNPJ_F010 ]
+    F550:
+      source: F550
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: F010
+      fields:
+        [
+          VL_REC_COMP,
+          CST_PIS,
+          VL_DESC_PIS,
+          VL_BC_PIS,
+          ALIQ_PIS,
+          VL_PIS,
+          CST_COFINS,
+          VL_DESC_COFINS,
+          VL_BC_COFINS,
+          ALIQ_COFINS,
+          VL_COFINS,
+          COD_MOD,
+          CFOP,
+          COD_CTA,
+          INFO_COMPL,
+        ]
+
+CONTRIB_0000_C010_C100_C170:
+  name: CONTRIB_0000_C010_C100_C170
+  enabled: true
+  base_entity: C010
+  entities:
+
+    C010:
+      source: C010
+      uid: _row_id
+      fields: [ CNPJ_C010, IND_ESCRI ]
+
+    C100:
+      source: C100
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: C010
+      fields:
+        [
+          IND_OPER,
+          IND_EMIT,
+          COD_PART,
+          COD_MOD,
+          COD_SIT,
+          SER,
+          NUM_DOC,
+          CHV_NFE,
+          DT_DOC,
+          DT_E_S,
+          VL_DOC,
+          IND_PGTO,
+          VL_DESC,
+          VL_ABAT_NT,
+          VL_MERC,
+          IND_FRT,
+          VL_FRT,
+          VL_SEG,
+          VL_OUT_DA,
+          VL_BC_ICMS,
+          VL_ICMS,
+          VL_BC_ICMS_ST,
+          VL_ICMS_ST,
+          VL_IPI,
+          VL_PIS,
+          VL_COFINS,
+          VL_PIS_ST,
+          VL_COFINS_ST,
+        ]
+    C170:
+      source: C170
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: C100
+      fields:
+        [
+          NUM_ITEM,
+          COD_ITEM,
+          DESCR_COMPL,
+          QTD,
+          UNID,
+          VL_ITEM,
+          VL_DESC,
+          IND_MOV,
+          CST_ICMS,
+          CFOP,
+          COD_NAT,
+          VL_BC_ICMS_ITEM,
+          ALIQ_ICMS_ITEM,
+          VL_ICMS_ITEM,
+          VL_BC_ICMS_ST_ITEM,
+          ALIQ_ST,
+          VL_ICMS_ST_ITEM,
+          IND_APUR,
+          CST_IPI,
+          COD_ENQ,
+          VL_BC_IPI,
+          ALIQ_IPI,
+          VL_IPI,
+          CST_PIS,
+          VL_BC_PIS,
+          ALIQ_PIS,
+          QUANT_BC_PIS,
+          ALIQ_PIS_QUANT,
+          VL_PIS_ITEM,
+          CST_COFINS,
+          VL_BC_COFINS,
+          ALIQ_COFINS,
+          QUANT_BC_COFINS,
+          ALIQ_COFINS_QUANT,
+          VL_COFINS_ITEM,
+          COD_CTA,
+        ]
+
+CONTRIB_RELATORIO_GERAL:
+  name: CONTRIB_RELATORIO_GERAL
+  enabled: true
+  description: "Visão consolidada de documentos fiscais (A100, C100, D100) - FLATTEN"
+
+  document_sources:
+    # =====================================================
+    # BLOCOS COMPOSTOS (Pai + Filhos achatados na mesma linha)
+    # =====================================================
+    A100_A170:
+      reg_type: "A100/A170"
+      base: A100
+      children:
+        - source: A170
+          join_on: _parent_uid_final # Coluna no FILHO que aponta pro pai
+          join_to: _row_id # Coluna no PAI (UID)
+      fields:
+        # === Campos do PAI (A100) ===
+        - FILE_ID
+        - IND_OPER
+        - IND_EMIT
+        - COD_PART
+        - COD_SIT
+        - SER
+        - SUB
+        - NUM_DOC
+        - CHV_NFSE
+        - DT_DOC
+        - DT_EXE_SERV
+        - VL_DOC
+        - IND_PGTO
+        - VL_DESC
+        - VL_BC_PIS
+        - VL_PIS
+        - VL_BC_COFINS
+        - VL_COFINS
+        - VL_PIS_RET
+        - VL_COFINS_RET
+        - VL_ISS
+        # === Campos do FILHO (A170) - COM ALIAS CORRETOS ===
+        - NUM_ITEM
+        - COD_ITEM
+        - DESCR_COMPL
+        - VL_ITEM
+        - { VL_DESC: VL_DESC_ITEM_A170 } # ✅ CORRETO: original → alias
+        - NAT_BC_CRED
+        - IND_ORIG_CRED
+        - CST_PIS
+        - { VL_BC_PIS: VL_BC_PIS_ITEM }
+        - ALIQ_PIS
+        - { VL_PIS: VL_PIS_ITEM }
+        - CST_COFINS
+        - { VL_BC_COFINS: VL_BC_COFINS_ITEM }
+        - ALIQ_COFINS
+        - { VL_COFINS: VL_COFINS_ITEM }
+        - COD_CTA
+        - COD_CCUS
+
+    C100_C170:
+      reg_type: "C100/C170"
+      base: C100
+      children:
+        - source: C170
+          join_on: _parent_uid_final # Coluna no FILHO que aponta pro pai
+          join_to: _row_id # Coluna no PAI (UID)
+      fields:
+        # === Campos do PAI (C100) ===
+        - FILE_ID
+        - IND_OPER
+        - IND_EMIT
+        - COD_PART
+        - COD_MOD
+        - COD_SIT
+        - SER
+        - NUM_DOC
+        - CHV_NFE
+        - DT_DOC
+        - DT_E_S
+        - VL_DOC
+        - IND_PGTO
+        - VL_DESC
+        - VL_ABAT_NT
+        - VL_MERC
+        - IND_FRT
+        - VL_FRT
+        - VL_SEG
+        - VL_OUT_DA
+        - VL_BC_ICMS
+        - VL_ICMS
+        - VL_BC_ICMS_ST
+        - VL_ICMS_ST
+        - VL_IPI
+        - VL_PIS
+        - VL_COFINS
+        - VL_PIS_ST
+        - VL_COFINS_ST
+        # === Campos do FILHO (C170) - COM ALIAS CORRETOS ===
+        - NUM_ITEM
+        - COD_ITEM
+        - DESCR_COMPL
+        - QTD
+        - UNID
+        - VL_ITEM
+        - { VL_DESC: VL_DESC_ITEM_C170 } # ✅ CORRETO: original → alias
+        - IND_MOV
+        - CST_ICMS
+        - CFOP
+        - COD_NAT
+        - { VL_BC_ICMS: VL_BC_ICMS_ITEM }
+        - { ALIQ_ICMS: ALIQ_ICMS_ITEM }
+        - { VL_ICMS: VL_ICMS_ITEM }
+        - { VL_BC_ICMS_ST: VL_BC_ICMS_ST_ITEM }
+        - ALIQ_ST
+        - { VL_ICMS_ST: VL_ICMS_ST_ITEM }
+        - IND_APUR
+        - CST_IPI
+        - COD_ENQ
+        - VL_BC_IPI
+        - ALIQ_IPI
+        - CST_PIS
+        - VL_BC_PIS
+        - ALIQ_PIS
+        - QUANT_BC_PIS
+        - ALIQ_PIS_QUANT
+        - { VL_PIS: VL_PIS_ITEM }
+        - CST_COFINS
+        - VL_BC_COFINS
+        - ALIQ_COFINS
+        - QUANT_BC_COFINS
+        - ALIQ_COFINS_QUANT
+        - { VL_COFINS: VL_COFINS_ITEM }
+        - COD_CTA
+
+    D100:
+      source: D100
+      reg_type: "D100"
+      fields:
+        - FILE_ID
+        - IND_OPER
+        - IND_EMIT
+        - COD_PART
+        - COD_MOD
+        - SER
+        - NUM_DOC
+        - CHV_CTE
+        - DT_DOC
+        - DT_A_P
+        - VL_DOC
+        - VL_DESC
+        - VL_SERV
+        - VL_ICMS
+
+    F100:
+      source: F100
+      reg_type: "F100"
+      fields:
+        - FILE_ID
+        - IND_OPER
+        - COD_PART
+        - DESC_DOC_OPER
+        - DT_OPER
+        - CST_PIS
+        - NAT_BC_CRED
+        - VL_OPER
+    # ADICIONAR OS REGISTROS C500, C501, C505
+
+    # =====================================================
+    # ENRIQUECIMENTOS (Apenas JOINs. Nada de UNION aqui)
+    # =====================================================
+  enrichments:
+    dados_arquivo:
+      source: "0000"
+      join_type: left
+      join_keys:
+        - FILE_ID: FILE_ID
+      fields:
+        - CNPJ
+        - NOME
+        - DT_INI
+        - UF
+        - OBRIG_ACESS
+
+    participante:
+      source: "0150"
+      join_type: left
+      join_keys:
+        - { COD_PART: CNPJ_PARTICIPANTE }
+        - { COD_PART: CPF_PARTICIPANTE }
+      join_mode: coalesce
+      fields:
+        - NOME_PARTICIPANTE
+        - COD_PAIS
+        - IE_PARTICIPANTE
+        - COD_MUN_PARTICIPANTE
+        - SUFRAMA_PARTICIPANTE
+        - END_PARTICIPANTE
+        - NUM_PARTICIPANTE
+        - COMPL_PARTICIPANTE
+        - BAIRRO_PARTICIPANTE
+
+    item:
+      source: "0200"
+      join_type: left
+      join_keys:
+        - COD_ITEM: COD_ITEM
+      fields:
+        - DESCR_ITEM
+        - COD_BARRA
+        - COD_ANT_ITEM
+        - UNID_INV
+        - TIPO_ITEM
+        - COD_NCM
+        - EX_IPI
+        - COD_GEN
+        - COD_LST
+        - ALIQ_ICMS
+
+    conta_contabil:
+      source: "0500"
+      join_type: left
+      join_keys:
+        - COD_CTA: COD_CTA
+      fields:
+        - NOME_CTA
+
+  output_columns:
+  # 0000
+    - OBRIG_ACESS
+    - REG_TIPO
+    - FILE_ID
+    - CNPJ
+    - NOME
+    - DT_INI
+    - UF
+  # 0150    
+    - NOME_PARTICIPANTE
+    - COD_PAIS
+    - IE_PARTICIPANTE
+    - COD_MUN_PARTICIPANTE
+    - SUFRAMA_PARTICIPANTE
+    - END_PARTICIPANTE
+    - NUM_PARTICIPANTE
+    - COMPL_PARTICIPANTE
+    - BAIRRO_PARTICIPANTE
+  # 0200
+    - DESCR_ITEM
+    - COD_BARRA
+    - COD_ANT_ITEM
+    - UNID_INV
+    - TIPO_ITEM
+    - COD_NCM
+    - EX_IPI
+    - COD_GEN
+    - COD_LST
+    - ALIQ_ICMS
+  # 0500
+    - NOME_CTA
+  # A100/A170
+    - IND_OPER
+    - IND_EMIT
+    - COD_PART
+    - COD_SIT
+    - SER
+    - SUB
+    - NUM_DOC
+    - CHV_NFSE
+    - DT_DOC
+    - DT_EXE_SERV
+    - VL_DOC
+    - IND_PGTO
+    - VL_DESC
+    - VL_BC_PIS
+    - VL_PIS
+    - VL_BC_COFINS
+    - VL_COFINS
+    - VL_PIS_RET
+    - VL_COFINS_RET
+    - VL_ISS
+    # === Campos do FILHO (A170) - COM ALIAS CORRETOS ===
+    - NUM_ITEM
+    - COD_ITEM
+    - DESCR_COMPL
+    - VL_ITEM
+    - VL_DESC_ITEM_A170
+    - NAT_BC_CRED
+    - IND_ORIG_CRED
+    - CST_PIS
+    - VL_BC_PIS_ITEM
+    - ALIQ_PIS
+    - VL_PIS_ITEM
+    - CST_COFINS
+    - VL_BC_COFINS_ITEM
+    - ALIQ_COFINS
+    - VL_COFINS_ITEM
+    - COD_CTA
+    - COD_CCUS
+  # C100/C170
+    - IND_OPER
+    - IND_EMIT
+    - COD_PART
+    - COD_MOD
+    - COD_SIT
+    - SER
+    - NUM_DOC
+    - CHV_NFE
+    - DT_DOC
+    - DT_E_S
+    - VL_DOC
+    - IND_PGTO
+    - VL_DESC
+    - VL_ABAT_NT
+    - VL_MERC
+    - IND_FRT
+    - VL_FRT
+    - VL_SEG
+    - VL_OUT_DA
+    - VL_BC_ICMS
+    - VL_ICMS
+    - VL_BC_ICMS_ST
+    - VL_ICMS_ST
+    - VL_IPI
+    - VL_PIS
+    - VL_COFINS
+    - VL_PIS_ST
+    - VL_COFINS_ST
+    # === Campos do FILHO (C170) - COM ALIAS CORRETOS ===
+    - NUM_ITEM
+    - COD_ITEM
+    - DESCR_COMPL
+    - QTD
+    - UNID
+    - VL_ITEM
+    - VL_DESC_ITEM_C170
+    - IND_MOV
+    - CST_ICMS
+    - CFOP
+    - COD_NAT
+    - VL_BC_ICMS_ITEM
+    - ALIQ_ICMS_ITEM
+    - VL_ICMS_ITEM
+    - VL_BC_ICMS_ST_ITEM
+    - ALIQ_ST
+    - VL_ICMS_ST_ITEM
+    - IND_APUR
+    - CST_IPI
+    - COD_ENQ
+    - VL_BC_IPI
+    - ALIQ_IPI
+    - CST_PIS
+    - VL_BC_PIS
+    - ALIQ_PIS
+    - QUANT_BC_PIS
+    - ALIQ_PIS_QUANT
+    - VL_PIS_ITEM
+    - CST_COFINS
+    - VL_BC_COFINS
+    - ALIQ_COFINS
+    - QUANT_BC_COFINS
+    - ALIQ_COFINS_QUANT
+    - VL_COFINS_ITEM
+    - COD_CTA
+  # D100
+    - IND_OPER
+    - IND_EMIT
+    - COD_PART
+    - COD_MOD
+    - SER
+    - NUM_DOC
+    - CHV_CTE
+    - DT_DOC
+    - DT_A_P
+    - VL_DOC
+    - VL_DESC
+    - VL_SERV
+    - VL_ICMS
+  # F100
+    - IND_OPER
+    - COD_PART
+    - DESC_DOC_OPER
+    - DT_OPER
+    - CST_PIS
+    - NAT_BC_CRED
+    - VL_OPER
+
+    
+
+    
+    

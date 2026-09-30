@@ -1,0 +1,22 @@
+darf_codes:
+  lucro_real_mensal:
+    irpj:
+      - "5993"
+    csll:
+      - "2484"
+  lucro_real_trimestral:
+    irpj:
+      - "3373"
+      - "0220"
+    csll:
+      - "6012"
+  lucro_presumido:
+    irpj:
+      - "2089"
+    csll:
+      - "2372"
+  ajuste_anual:
+    irpj:
+      - "2456"
+    csll:
+      - "6773"

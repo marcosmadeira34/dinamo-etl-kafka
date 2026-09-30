@@ -1,0 +1,379 @@
+# dinamo_web/config/business_rules.yaml
+
+# Classificações para a coluna 'CRED-DEB CBS/IBS'
+credit_classifications:
+  cancelled_nf: "NF Cancelada"
+  fixed_assets: "Ativo Imobilizado"
+  services: "Servicos"
+  electricity: "Energia Eletrica"
+  freigth: "Frete"
+  other_operations: "Outros"
+  # Adicionar outras classificações conforme necessário
+
+  # Mapeamento do tipo de registro para a classificação
+record_to_classification_map:
+  "G110/G115": "fixed_assets"
+  "A100/A170": "services"
+  "C500/C501/C505": "electricity"
+  "D100/D101/D105": "freigth"
+  "F100": "other_operations"
+  "F120/F130": "fixed_assets"
+  # Adicionar outras classificações conforme necessário
+
+  # Codigos de situacao do documento que indicam cancelamento
+cancelled_situations:
+  - "02 - Nota Fiscal Cancelada"
+  - "04 - Nota Fiscal Denegada"
+  - "05 - Nota Fiscal Inutilizada"
+
+# Codigos de situacao do documento (sem descricao) para facilitar o filtro
+cancelled_situation_codes:
+  - "02"
+  - "04"
+  - "05"
+
+# Filtros para os blocos lógicos
+# Registros que vêm do SPED Contribuicoes e sao tratados como "Servicos e Outros"
+sped_contribuicoes_service_records:
+  - "A100/A170"
+  - "F100"
+
+# Registros que devem ser excluidos da busca por match de saida
+sped_contribuicoes_exclude_from_match:
+  - "A100/A170"
+  - "F100"
+
+# Strings constantes
+origin_system:
+  sped_fiscal: "SPED Fiscal"
+  sped_contribuicoes: "SPED Contribuicoes"
+
+# config.yaml (estrutura esperada pelo código)
+regime_tributario:
+  bucket_name: "datafoundation-agtax-evollux-prd"
+  path: "REGIME_TRIBUTARIO/"
+
+# Tabela CFOP
+tabela_cfop:
+  bucket_name: "datafoundation-agtax-evollux-prd"
+  path: "TABELA_CFOP/"
+
+# Arquivo JSON com os registros e seus pais mapeados
+identify_parents:
+  path: "./dinamo_etl_project/identify_parents.json"
+
+codigo_situacao_documento_mapping:
+  "00": "00 - DOCUMENTO REGULAR"
+  "01": "01 - ESCRITURACAO EXTEMPORANEA DE DOCUMENTO REGULAR"
+  "02": "02 - DOCUMENTO CANCELADO"
+  "03": "03 - ESCRITURACAO EXTEMPORANEA DE DOCUMENTO CANCELADO"
+  "04": "04 - NFE OU CTE - DENEGADO"
+  "05": "05 - NFE OU CTE - NUMERACAO INUTILIZADA"
+  "06": "06 - DOCUMENTO FISCAL COMPLEMENTAR"
+  "07": "07 - ESCRITURACAO EXTEMPORANEA DE DOCUMENTO COMPLEMENTAR"
+  "08": "08 - DOCUMENTO FISCAL REGIME ESPECIAL OU NORMA ESPECIFICA"
+
+parent_child_mapping_ecd:
+  # Nível 0: Abertura e Encerramento do Arquivo Digital
+  - parent: "0000" # Nível 0
+    children:
+      [
+        "0001",
+        "0990",
+        "C001",
+        "C990",
+        "I001",
+        "I990",
+        "J001",
+        "J990",
+        "K001",
+        "K990",
+        "9001",
+        "9990",
+        "9999",
+      ] # [2, 4]
+
+  # Bloco 0: Abertura, Identificação e Referências
+  - parent: "0001" # Nível 1
+    children: [ "0007", "0020", "0035", "0150" ] # [2, 5]
+  - parent: "0150" # Nível 2
+    children: [ "0180" ] # [5]
+
+  # Bloco C: Informações Recuperadas da ECD Anterior
+  - parent: "C001" # Nível 1
+    children: [ "C040" ] # [5]
+  - parent: "C040" # Nível 2
+    children: [ "C050", "C150", "C600" ] # [5]
+  - parent: "C050" # Nível 3
+    children: [ "C051", "C052" ] # [5]
+  - parent: "C150" # Nível 3
+    children: [ "C155" ] # [5]
+  - parent: "C600" # Nível 3
+    children: [ "C650" ] # [6]
+
+  # Bloco I: Lançamentos Contábeis
+  - parent: "I001" # Nível 1 
+    children:
+      [
+        "I010",
+        "I030",
+        "I050",
+        "I075",
+        "I100",
+        "I150",
+        "I200",
+        "I300",
+        "I350",
+        "I500",
+        "I510",
+        "I550",
+      ] # [6, 7]
+  - parent: "I010" # Nível 2
+    children: [ "I012", "I020" ] # [6]
+  - parent: "I012" # Nível 3
+    children: [ "I015" ] # [6]
+  - parent: "I050" # Nível 3
+    children: [ "I051", "I052", "I053" ] # [8]
+  - parent: "I150" # Nível 3
+    children: [ "I155" ] # [9]
+  - parent: "I155" # Nível 4
+    children: [ "I157" ] # [9]
+  - parent: "I200" # Nível 3
+    children: [ "I250" ] # [9]
+  - parent: "I300" # Nível 3
+    children: [ "I310" ] # [9]
+  - parent: "I350" # Nível 3
+    children: [ "I355" ] # [9]
+  - parent: "I550" # Nível 3
+    children: [ "I555" ] # [7]
+
+  # Bloco J: Demonstrações Contábeis
+  - parent: "J001" # Nível 1
+    children: [ "J005", "J900" ] # [7, 10]
+  - parent: "J005" # Nível 2
+    children: [ "J100", "J150", "J210", "J800", "J801", "J930", "J932", "J935" ] # [7, 10]
+  - parent: "J210" # Nível 3
+    children: [ "J215" ] # [10]
+
+  # Bloco K: Conglomerados Econômicos
+  - parent: "K001" # Nível 1
+    children: [ "K030", "K100", "K200", "K300" ] # [11]
+  - parent: "K100" # Nível 3
+    children: [ "K110" ] # [11]
+  - parent: "K110" # Nível 4
+    children: [ "K115" ] # [11]
+  - parent: "K200" # Nível 2
+    children: [ "K210" ] # [11]
+  - parent: "K300" # Nível 3
+    children: [ "K310" ] # [11]
+  - parent: "K310" # Nível 4
+    children: [ "K315" ] # [4]
+
+  # Bloco 9: Controle e Encerramento do Arquivo Digital
+  - parent: "9001" # Nível 1
+    children: [ "9900" ] # [4]
+
+# ==========================================
+# ECD - BLOCO I (Plano de Contas e Lançamentos)
+# ==========================================
+inheritance_fields:
+  # I051 (Complemento da Conta) herda do I050 (Conta)
+  I051:
+    from: I050
+    fields:
+      - DT_ALT
+      - COD_NAT
+      - IND_CTA
+      - NIVEL
+      - COD_CTA
+      - COD_CTA_SUP
+      - CTA
+
+  # I052 (Conta Aglutinada) também puxa dados da conta pai (I050)
+  I052:
+    from: I050
+    fields:
+      - DT_ALT
+      - COD_NAT
+      - IND_CTA
+      - NIVEL
+      - COD_CTA
+      - COD_CTA_SUP
+      - CTA
+
+  # I250 (Partidas do Lançamento) puxa dados do cabeçalho do lançamento (I200)
+  I250:
+    from: I200
+    fields:
+      - NUM_LCTO
+      - DT_LCTO
+      - VL_LCTO
+      - IND_LCTO
+      - DT_LCTO_EXT
+      - VL_LCTO_MF
+
+  # I355 (Detalhes dos Saldos) puxa a data de referência do pai (I350)
+  I355:
+    from: I350
+    fields:
+      - DT_RES
+
+# RELATÓRIOS ECD
+ECD_0000_I050_I052:
+  name: ECD_0000_I050_I052
+  base_entity: I050
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, OBRIG_ACESS, NOME, CNPJ, UF, DT_INI ]
+    I050:
+      source: I050
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: "0000"
+      fields: [ FILE_ID, DT_ALT, COD_NAT, IND_CTA, NIVEL, COD_CTA, COD_CTA_SUP, CTA ]  
+    I052:
+      source: I052
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: I050
+      fields: [ FILE_ID, COD_CCUS, COD_AGL ]
+
+ECD_0000_I200_I250:
+  name: ECD_0000_I200_I250
+  base_entity: I200
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, OBRIG_ACESS, NOME, CNPJ, UF, DT_INI ]
+    I001:
+      source: I001
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: []
+    I200:
+      source: I200
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: I001
+      fields: [ NUM_LCTO, DT_LCTO, VL_LCTO, IND_LCTO, DT_LCTO_EXT, VL_LCTO_MF ]
+    I250:
+      source: I250
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: I200
+      fields:
+        [
+          COD_CTA,
+          COD_CCUS,
+          VL_DC,
+          IND_DC,
+          NUM_ARQ,
+          COD_HIST_PAD,
+          HIST,
+          COD_PART,
+        ]
+
+ECD_0000_J100:
+  name: ECD_0000_J100
+  base_entity: J100
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, OBRIG_ACESS, NOME, CNPJ, UF, DT_INI ]
+    
+    J005:
+      source: J005
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: []
+    
+    J100:
+      source: J100
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: J005
+      fields:
+        [
+          COD_AGL,
+          IND_COD_AGL,
+          NIVEL_AGL,
+          COD_AGL_SUP,
+          IND_GRP_BAL,
+          DESCR_COD_AGL,
+          VL_CTA_INI,
+          IND_DC_CTA_INI,
+          VL_CTA_FIN,
+          IND_DC_CTA_FIN,
+          NOTA_EXP_REF,
+        ]
+
+ECD_0000_J150:
+  name: ECD_0000_J150
+  base_entity: J150
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, OBRIG_ACESS, NOME, CNPJ, UF, DT_INI ]
+    J005:
+      source: J005
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: []
+    J150:
+      source: J150
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: J005
+      fields:
+        [
+          NUM_ORDEM,
+          COD_AGL,
+          IND_COD_AGL,
+          NIVEL_AGL,
+          COD_AGL_SUP,
+          DESCR_COD_AGL,
+          VL_CTA_INI,
+          IND_DC_CTA_INI,
+          VL_CTA_FIN,
+          IND_DC_CTA_FIN,
+          IND_GRP_DRE,
+          NOTA_EXP_REF,
+        ]
+
+ECD_0000_J930:
+  name: ECD_0000_J930
+  base_entity: J930
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, OBRIG_ACESS, NOME, CNPJ, UF, DT_INI ]
+    J005:
+      source: J005
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: []
+    J930:
+      source: J930
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: J005
+      fields:
+        [
+          IDENT_NOM,
+          IDENT_CPF_CNPJ,
+          IDENT_QUALIF,
+          COD_ASSIN,
+          IND_CRC,
+          EMAIL,
+          FONE,
+          UF_CRC,
+          NUM_SEQ_CRC,
+          DT_CRC,
+          IND_RESP_LEGAL,
+        ]

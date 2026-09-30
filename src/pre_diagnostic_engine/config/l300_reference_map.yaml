@@ -1,0 +1,16 @@
+l300_opportunities:
+  pat:
+    reference: "3.01.01.07.01.13"
+    description: "PAT"
+    estimated_credit_percent: 0.15
+    score: 20
+  receita_jcp:
+    reference: "3.01.01.05.01.04"
+    description: "Receita JCP"
+    per_apur: "T04"
+    score: 10
+  despesa_jcp:
+    reference: "3.01.01.09.01.04"
+    description: "Despesa JCP"
+    per_apur: "T04"
+    score: 15

@@ -1,0 +1,16 @@
+{
+  "type": "record",
+  "name": "SpedRawIngestEvent",
+  "namespace": "com.dinamo.sped.events",
+  "doc": "Event emitted when a new SPED file is detected in OCI bucket",
+  "fields": [
+    {"name": "file_path", "type": "string", "doc": "Full S3 key path"},
+    {"name": "file_name", "type": "string"},
+    {"name": "file_size_bytes", "type": "long"},
+    {"name": "sped_type", "type": ["null", "string"], "default": null, "doc": "EFD_FISCAL|EFD_CONTRIB|ECD|ECF"},
+    {"name": "detected_cnpj", "type": ["null", "string"], "default": null},
+    {"name": "bucket_name", "type": "string"},
+    {"name": "event_timestamp_ms", "type": "long"},
+    {"name": "source", "type": "string", "default": "file_watcher"}
+  ]
+}

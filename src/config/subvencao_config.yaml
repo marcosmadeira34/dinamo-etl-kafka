@@ -1,0 +1,67 @@
+# src/config/subvencao_config.yaml
+#
+# Configuracao do relatorio de Subvencao (diagnostico ICMS - isencao/reducao
+# em operacoes diretas). Carregado via ConfigManager.subvencao_config, mesmo
+# padrao de fiscal_config/contrib_config/cfop_config.
+#
+# bucket_name e credenciais NAO ficam aqui - vem de main_config.yaml (s3.*)
+# e de .env / spark.kubernetes.driverEnv.*, exatamente como o resto do
+# dinamo. Este arquivo so guarda regra de negocio (filtros tributarios) e
+# metadados do relatorio (registros de origem, nomes de saida).
+
+sped_type: "EFD_FISCAL"
+registros_necessarios: ["C100", "C190", "0000", "0150"]   # 0000/0150 sao usados so para derivar UF Origem/Destino do calculo de isencao
+
+# Secao "Subvencao sobre Operacoes" do mapeamento funcional: mudanca
+# legislativa invalida o calculo a partir de 2024 — so processar periodos
+# com ano <= ano_limite_subvencao. Usado por --todos-periodos em
+# apps/subvencao_app.py pra filtrar a descoberta automatica de periodos.
+ano_limite_subvencao: 2023
+
+# Tabelas de referencia no bucket (fora da camada Silver, .xlsx, lidas via
+# BucketConnector.download_file_bytes — nao ha leitor Spark nativo p/ xlsx).
+referencias:
+  # Todas as 3 tabelas agora sao .parquet (nao mais .xlsx) — leitura nativa
+  # via spark.read.parquet, sem passar por download_file_bytes+pandas.
+  # Precisa converter os arquivos reais no bucket de xlsx para parquet
+  # (ver script de conversao) ANTES de trocar as chaves abaixo.
+  aliquotas_interestadual_key: "TABELA_ALIQUOTAS_INTERESTADUAIS/aliquotas_interestaduais.parquet"
+  municipios_key: "TABELA_MUNICIPIO/municipios_brasil.parquet"
+  # Tabela CFOP DEDICADA de Subvencao — NAO e mais a TABELA_CFOP/ generica
+  # usada em silver_layer/silver_builder.py. Usada so para derivar o sinal
+  # (+1/-1) via nat_cfop; a elegibilidade continua vindo da lista explicita
+  # em filters.cfops.validos.
+  cfop_key: "TABELA_CFOP_SUBVENCAO/tabela_cfop_subvencao.parquet"
+
+filters:
+  csts:
+    # Isencao INCONDICIONAL (CST final 40 e variantes).
+    isencao: ["040", "140", "240", "340", "440", "540", "640", "740", "840"]
+    # Reducao INCONDICIONAL (CST final 20 e 70 e variantes).
+    reducao: ["020", "120", "220", "320", "420", "520", "620", "720", "820",
+              "070", "270", "370", "470", "570", "670", "770", "870"]
+    # CST final 51 e CONDICIONAL (secao 4.5.1 do mapeamento funcional):
+    # com valor em VL_RED_BC -> vai para REDUCAO; sem valor -> vai para
+    # ISENCAO. Avaliado em tempo de execucao no builder, nao aqui.
+    condicionais_51: ["051", "151", "251", "351", "451", "551", "651", "751", "851"]
+  cfops:
+    # Lista EXPLICITA e AUTORITATIVA de CFOPs elegiveis (venda e devolucao
+    # de venda). Confirmada contra a TABELA_CFOP real: dos 62 codigos, 58
+    # existem na tabela e sao classificados exatamente como nat_cfop=
+    # 'Venda' ou 'Devolução de venda' (nenhum outro tipo) — 4 codigos
+    # (5107, 5108, 5121, 6121) nao existem na tabela (provavelmente
+    # descontinuados), mas entram na elegibilidade mesmo assim por decisao
+    # explicita. O sinal (+1/-1) e derivado de nat_cfop no builder, nao
+    # mais de heuristica por primeiro digito (ver subvencao_gold_builder.py).
+    validos: [1201, 1202, 1203, 1204, 2201, 2202, 2203, 2204, 3201, 3202, 3211,
+              5101, 5102, 5103, 5104, 5105, 5106, 5107, 5108, 5109, 5110, 5111,
+              5112, 5113, 5114, 5115, 5116, 5117, 5118, 5119, 5120, 5121, 5122,
+              5123, 6101, 6102, 6103, 6104, 6105, 6106, 6107, 6108, 6109, 6110,
+              6111, 6112, 6113, 6114, 6115, 6116, 6117, 6118, 6119, 6120, 6121,
+              6122, 6123, 7101, 7102, 7105, 7106, 7127]
+
+# Nome dos relatorios de saida na camada Gold — pasta final sera:
+#   GOLD/<CNPJ>/SUBVENCAO/<report>/<MMAAAA>/
+reports:
+  isencao: "SUBVENCAO_ISENCAO"
+  reducao: "SUBVENCAO_REDUCAO"

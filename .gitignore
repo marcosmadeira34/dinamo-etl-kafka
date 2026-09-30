@@ -1,0 +1,101 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+download_files/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment variables
+.env
+.env.local
+
+# Logs
+*.log
+logs/
+
+# Data files
+*.csv
+*.xlsx
+*.parquet
+data/
+temp/
+tmp/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+output/
+results/
+cache/
+.cache/
+
+
+spark-*.tgz
+*.tgz
+*.jar
+
+download_files/
+ECF_FISCAL/
+ECF_CONTR/
+
+*.csv
+*.ipynb
+
+# Arquivos locais
+dinamo_streaming.zip
+ag-platform-launcher.zip
+
+# Projetos auxiliares
+ag-platform-launcher/
+
+# Metadados do Windows
+*:Zone.Identifier
+
+# Separar o ag-platform-launcher deste projeto
+ag-platform-launcher/
+
+dinamo-launcher/
+.ipynb_checkpoints/dinamo-launcher/
+src.zip
+*.zip

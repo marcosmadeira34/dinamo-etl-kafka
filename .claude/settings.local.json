@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wsl -d Ubuntu -- bash -c \"cd /home/marcosmadeira/dinamo-etl-kafka && ~/spark_test_venv/bin/pytest tests/ -v 2>&1 | tail -60\")",
+      "Bash(wsl -d Ubuntu -- bash -c \"rm -rf ~/spark_test_venv /tmp/spark_test_venv\")",
+      "Bash(wsl -d Ubuntu -- bash -c \"python3 -m venv ~/spark_test_venv2 && ~/spark_test_venv2/bin/pip install --quiet pyspark==3.5.1 pytest pyyaml 2>&1 | tail -20\")",
+      "Bash(wsl -d Ubuntu -- bash -c \"cd /home/marcosmadeira/dinamo-etl-kafka && ~/spark_test_venv2/bin/pytest tests/ -v 2>&1 | tail -20\")",
+      "Bash(wsl -d Ubuntu -- bash -c \"rm -rf ~/spark_test_venv2\")",
+      "Bash(wsl -d Ubuntu -- bash -c \"cd /home/marcosmadeira/dinamo-etl-kafka && cat .env 2>/dev/null | grep -iE 'AWS_|OCI_|ENDPOINT' | sed -E 's/\\(SECRET|KEY\\)=.+/\\\\1=[REDACTED]/'\")",
+      "Bash(wsl -d Ubuntu -- bash -c 'cd /home/marcosmadeira/dinamo-etl-kafka && ./venv/bin/python -c \" *)",
+      "Bash(wsl -d Ubuntu -- bash -c \"cd /home/marcosmadeira/dinamo-etl-kafka && ./venv/bin/python -c 'import boto3; print\\(boto3.__version__\\)' 2>&1\")"
+    ]
+  }
+}

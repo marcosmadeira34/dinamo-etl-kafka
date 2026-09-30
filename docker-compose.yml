@@ -1,0 +1,518 @@
+# =============================================================================
+# DINAMO ETL PLATFORM — Enterprise Docker Compose
+# =============================================================================
+# Stack: ZooKeeper + 3 Kafka Brokers + Schema Registry + Spark (Master + 2 Workers)
+#        + Prometheus + Grafana + JMX Exporters
+#
+# Usage:
+#   cp .env.template .env   # fill secrets
+#   docker compose up -d
+#   ./scripts/init-cluster.sh
+# =============================================================================
+#
+# CHANGELOG (fixes aplicados):
+#   [FIX-1] kafka-2 e kafka-3: KAFKA_ADVERTISED_LISTENERS EXTERNAL agora aponta
+#           para localhost (acessível fora do Docker), não para o hostname interno.
+#   [FIX-2] kafka-2 e kafka-3: healthcheck trocado de CMD para CMD-SHELL para
+#           permitir redirecionamento de saída e execução correta via shell.
+#   [FIX-3] kafka-1: healthcheck também corrigido para CMD-SHELL (mesmo problema).
+#   [FIX-4] spark-worker-1 e spark-worker-2: KAFKA_BOOTSTRAP_SERVERS corrigido
+#           para usar porta interna 9092 em todos os brokers (porta do host é
+#           9093/9094 — inacessível dentro da rede Docker).
+#   [FIX-5] kafka-exporter: depends_on expandido para os 3 brokers com
+#           condition: service_healthy.
+#   [FIX-6] Grafana: senha padrão removida; variável obrigatória com :? para
+#           forçar erro explícito se não definida no .env.
+#   [FIX-7] Schema Registry: start_period aumentado de 30s para 60s para
+#           acomodar cold start do cluster Kafka.
+# =============================================================================
+
+services:
+
+  # ===========================================================================
+  # ZOOKEEPER
+  # ===========================================================================
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.1
+    container_name: dinamo-zookeeper
+    hostname: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_MAX_CLIENT_CNXNS: 60
+      ZOOKEEPER_4LW_COMMANDS_WHITELIST: ruok,srvr,stat,mntr,conf,isro
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_HOSTNAME: zookeeper
+    volumes:
+      - zookeeper-data:/var/lib/zookeeper/data
+      - zookeeper-logs:/var/lib/zookeeper/log
+    networks:
+      - dinamo-network
+    healthcheck:
+      test: [ "CMD-SHELL", "echo srvr | nc localhost 2181 | grep Mode" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 15s
+    restart: unless-stopped
+
+  # ===========================================================================
+  # KAFKA BROKER 1
+  # ===========================================================================
+  kafka-1:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: dinamo-kafka-1
+    hostname: kafka-1
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+      - "39092:39092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:29092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:9092,EXTERNAL://localhost:29092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+
+      # --- Replication & Durability ---
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE: "false"
+      KAFKA_NUM_PARTITIONS: 12
+      # --- Performance ---
+      KAFKA_NUM_IO_THREADS: 8
+      KAFKA_NUM_NETWORK_THREADS: 5
+      KAFKA_SOCKET_SEND_BUFFER_BYTES: 102400
+      KAFKA_SOCKET_RECEIVE_BUFFER_BYTES: 102400
+      KAFKA_SOCKET_REQUEST_MAX_BYTES: 104857600
+      KAFKA_COMPRESSION_TYPE: snappy
+      KAFKA_LOG_SEGMENT_BYTES: 536870912
+      # --- Retention ---
+      KAFKA_LOG_RETENTION_HOURS: 168
+      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 300000
+      KAFKA_LOG_CLEANUP_POLICY: delete
+      # --- Transactions ---
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      # --- JMX para Prometheus (não expor porta 9999 no host) ---
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_HOSTNAME: kafka-1
+      KAFKA_JMX_OPTS: "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=false"
+    volumes:
+      - kafka-1-data:/var/lib/kafka/data
+    networks:
+      - dinamo-network
+    healthcheck:
+      # [FIX-3] CMD → CMD-SHELL para executar corretamente com redirecionamento
+      test: [ "CMD-SHELL", "kafka-broker-api-versions --bootstrap-server localhost:9092 > /dev/null 2>&1" ]
+      interval: 20s
+      timeout: 15s
+      retries: 10
+      start_period: 40s
+    restart: unless-stopped
+
+  # ===========================================================================
+  # KAFKA BROKER 2
+  # ===========================================================================
+  kafka-2:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: dinamo-kafka-2
+    hostname: kafka-2
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - "9093:9092"
+      - "29093:29093"
+      - "39093:39093"
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:29093
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-2:9092,EXTERNAL://localhost:29093
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE: "false"
+      KAFKA_NUM_PARTITIONS: 12
+      KAFKA_NUM_IO_THREADS: 8
+      KAFKA_NUM_NETWORK_THREADS: 5
+      KAFKA_SOCKET_SEND_BUFFER_BYTES: 102400
+      KAFKA_SOCKET_RECEIVE_BUFFER_BYTES: 102400
+      KAFKA_SOCKET_REQUEST_MAX_BYTES: 104857600
+      KAFKA_COMPRESSION_TYPE: snappy
+      KAFKA_LOG_SEGMENT_BYTES: 536870912
+      KAFKA_LOG_RETENTION_HOURS: 168
+      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 300000
+      KAFKA_LOG_CLEANUP_POLICY: delete
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_HOSTNAME: kafka-2
+      KAFKA_JMX_OPTS: "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=false"
+    volumes:
+      - kafka-2-data:/var/lib/kafka/data
+    networks:
+      - dinamo-network
+    healthcheck:
+      # [FIX-2] CMD → CMD-SHELL; porta correta para este broker (9092 interno)
+      test: [ "CMD-SHELL", "kafka-broker-api-versions --bootstrap-server localhost:9092 > /dev/null 2>&1" ]
+      interval: 20s
+      timeout: 15s
+      retries: 10
+      start_period: 40s
+    restart: unless-stopped
+
+  # ===========================================================================
+  # KAFKA BROKER 3
+  # ===========================================================================
+  kafka-3:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: dinamo-kafka-3
+    hostname: kafka-3
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - "9094:9092"
+      - "29094:29094"
+      - "39094:39094"
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:29094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-3:9092,EXTERNAL://localhost:29094
+
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE: "false"
+      KAFKA_NUM_PARTITIONS: 12
+      KAFKA_NUM_IO_THREADS: 8
+      KAFKA_NUM_NETWORK_THREADS: 5
+      KAFKA_SOCKET_SEND_BUFFER_BYTES: 102400
+      KAFKA_SOCKET_RECEIVE_BUFFER_BYTES: 102400
+      KAFKA_SOCKET_REQUEST_MAX_BYTES: 104857600
+      KAFKA_COMPRESSION_TYPE: snappy
+      KAFKA_LOG_SEGMENT_BYTES: 536870912
+      KAFKA_LOG_RETENTION_HOURS: 168
+      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 300000
+      KAFKA_LOG_CLEANUP_POLICY: delete
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_HOSTNAME: kafka-3
+      KAFKA_JMX_OPTS: "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=false"
+    volumes:
+      - kafka-3-data:/var/lib/kafka/data
+    networks:
+      - dinamo-network
+    healthcheck:
+      # [FIX-2] CMD → CMD-SHELL; porta correta para este broker (9092 interno)
+      test: [ "CMD-SHELL", "kafka-broker-api-versions --bootstrap-server localhost:9092 > /dev/null 2>&1" ]
+      interval: 20s
+      timeout: 15s
+      retries: 10
+      start_period: 40s
+    restart: unless-stopped
+
+  # ===========================================================================
+  # KAFKA INIT (Auto-criação de tópicos)
+  # ===========================================================================
+  kafka-init:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: dinamo-kafka-init
+    depends_on:
+      kafka-1:
+        condition: service_healthy
+      kafka-2:
+        condition: service_healthy
+      kafka-3:
+        condition: service_healthy
+    networks:
+      - dinamo-network
+    volumes:
+      - ./kafka/create-topics.sh:/scripts/create-topics.sh:ro
+    command: >
+      bash -c "
+        echo 'Aguardando Kafka estar pronto para criar tópicos...'
+        sleep 5
+        bash /scripts/create-topics.sh
+      "
+
+  # ===========================================================================
+  # SCHEMA REGISTRY
+  # ===========================================================================
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.6.1
+    container_name: dinamo-schema-registry
+    hostname: schema-registry
+    depends_on:
+      kafka-1:
+        condition: service_healthy
+      kafka-2:
+        condition: service_healthy
+      kafka-3:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka-1:9092,kafka-2:9092,kafka-3:9092
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+      SCHEMA_REGISTRY_SCHEMA_COMPATIBILITY_LEVEL: BACKWARD
+      SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL: BACKWARD
+      SCHEMA_REGISTRY_DEBUG: "true"
+    networks:
+      - dinamo-network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8081/subjects || exit 1" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      # [FIX-7] Aumentado de 30s para 60s para acomodar cold start do cluster
+      start_period: 60s
+    restart: unless-stopped
+
+  # ===========================================================================
+  # KAFKA JMX EXPORTER (Prometheus metrics for Kafka)
+  # ===========================================================================
+  kafka-exporter:
+    image: danielqsj/kafka-exporter:latest
+    container_name: dinamo-kafka-exporter
+    hostname: kafka-exporter
+    # [FIX-5] Dependência expandida para os 3 brokers com service_healthy
+    #         Evita falha silenciosa ao tentar conectar brokers ainda não prontos
+    depends_on:
+      kafka-1:
+        condition: service_healthy
+      kafka-2:
+        condition: service_healthy
+      kafka-3:
+        condition: service_healthy
+    command:
+      - "--kafka.server=kafka-1:9092"
+      - "--kafka.server=kafka-2:9092"
+      - "--kafka.server=kafka-3:9092"
+      - "--topic.filter=sped.*"
+      - "--group.filter=dinamo.*"
+    ports:
+      - "9308:9308"
+    networks:
+      - dinamo-network
+    restart: unless-stopped
+
+  # ===========================================================================
+  # SPARK MASTER
+  # ===========================================================================
+  spark-master:
+    build:
+      context: .
+      dockerfile: infrastructure/spark/Dockerfile
+    container_name: dinamo-spark-master
+    hostname: spark-master
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+      - "4040:4040"
+    environment:
+      PYTHONPATH: /opt/spark/app
+      SPARK_MODE: master
+      SPARK_MASTER_HOST: spark-master
+      SPARK_MASTER_PORT: 7077
+      SPARK_MASTER_WEBUI_PORT: 8080
+      SPARK_DAEMON_MEMORY: 1g
+      # --- S3/OCI ---
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-dummy}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-dummy}
+      AWS_ENDPOINT_URL: ${AWS_ENDPOINT_URL:-http://dummy}
+      BUCKET_NAME: ${BUCKET_NAME:-dummy}
+      # --- Kafka (portas internas — correto) ---
+      KAFKA_BOOTSTRAP_SERVERS: kafka-1:9092,kafka-2:9092,kafka-3:9092
+      SCHEMA_REGISTRY_URL: http://schema-registry:8081
+    volumes:
+      - spark-checkpoints:/opt/spark/checkpoints
+      - spark-data-lake:/opt/spark/data-lake
+      - ./src:/opt/spark/app/src
+    networks:
+      - dinamo-network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8080/ || exit 1" ]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  # ===========================================================================
+  # SPARK WORKER 1
+  # ===========================================================================
+  spark-worker-1:
+    build:
+      context: .
+      dockerfile: infrastructure/spark/Dockerfile
+    container_name: dinamo-spark-worker-1
+    hostname: spark-worker-1
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    depends_on:
+      spark-master:
+        condition: service_healthy
+    environment:
+      SPARK_MODE: worker
+      SPARK_MASTER_URL: spark://spark-master:7077
+      SPARK_WORKER_CORES: ${SPARK_WORKER_CORES:-4}
+      SPARK_WORKER_MEMORY: ${SPARK_WORKER_MEMORY:-4g}
+      SPARK_WORKER_WEBUI_PORT: 8085
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_ENDPOINT_URL: ${AWS_ENDPOINT_URL}
+      BUCKET_NAME: ${BUCKET_NAME}
+      # [FIX-4] Portas corrigidas: dentro da rede Docker todos os brokers
+      #         são acessíveis na porta interna 9092, não em 9093/9094 (host)
+      KAFKA_BOOTSTRAP_SERVERS: kafka-1:9092,kafka-2:9092,kafka-3:9092
+    volumes:
+      - spark-checkpoints:/opt/spark/checkpoints
+      - spark-data-lake:/opt/spark/data-lake
+      - ./src:/opt/spark/app/src
+    networks:
+      - dinamo-network
+    restart: unless-stopped
+
+  # ===========================================================================
+  # SPARK WORKER 2
+  # ===========================================================================
+  spark-worker-2:
+    build:
+      context: .
+      dockerfile: infrastructure/spark/Dockerfile
+    container_name: dinamo-spark-worker-2
+    hostname: spark-worker-2
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    depends_on:
+      spark-master:
+        condition: service_healthy
+    environment:
+      SPARK_MODE: worker
+      SPARK_MASTER_URL: spark://spark-master:7077
+      SPARK_WORKER_CORES: ${SPARK_WORKER_CORES:-4}
+      SPARK_WORKER_MEMORY: ${SPARK_WORKER_MEMORY:-4g}
+      SPARK_WORKER_WEBUI_PORT: 8082
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_ENDPOINT_URL: ${AWS_ENDPOINT_URL}
+      BUCKET_NAME: ${BUCKET_NAME}
+      # [FIX-4] Portas corrigidas: porta interna 9092 em todos os brokers
+      KAFKA_BOOTSTRAP_SERVERS: kafka-1:9092,kafka-2:9092,kafka-3:9092
+    volumes:
+      - spark-checkpoints:/opt/spark/checkpoints
+      - spark-data-lake:/opt/spark/data-lake
+      - ./src:/opt/spark/app/src
+    networks:
+      - dinamo-network
+    restart: unless-stopped
+  # ===========================================================================
+  # PROMETHEUS
+  # ===========================================================================
+  # prometheus:
+  #   image: prom/prometheus:v2.51.2
+  #   container_name: dinamo-prometheus
+  #   hostname: prometheus
+  #   ports:
+  #     - "${PROMETHEUS_PORT:-9090}:9090"
+  #   volumes:
+  #     - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+  #     - prometheus-data:/prometheus 
+  #   command:
+  #     - "--config.file=/etc/prometheus/prometheus.yml"
+  #     - "--storage.tsdb.retention.time=30d"
+  #     - "--web.enable-lifecycle"
+  #   networks:
+  #     - dinamo-network
+  #   healthcheck:
+  #     test: [ "CMD-SHELL", "wget -qO- http://localhost:9090/-/healthy || exit 1" ]
+  #     interval: 15s
+  #     timeout: 5s
+  #     retries: 3
+  #   restart: unless-stopped
+
+  # ===========================================================================
+  # GRAFANA
+  # ===========================================================================
+  # grafana:
+  #   image: grafana/grafana:10.4.2
+  #   container_name: dinamo-grafana
+  #   hostname: grafana
+  #   depends_on:
+  #     prometheus:
+  #       condition: service_healthy
+  #   ports:
+  #     - "${GRAFANA_PORT:-3000}:3000"
+  #   environment:
+  #     GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+  #     # [FIX-6] Fallback com senha hardcoded removido.
+  #     #         Use: echo 'GRAFANA_ADMIN_PASSWORD=sua_senha' >> .env
+  #     #         O :? força erro explícito no `docker compose up` se não definida.
+  #     GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?Defina GRAFANA_ADMIN_PASSWORD no .env}
+  #     GF_USERS_ALLOW_SIGN_UP: "false"
+  #     GF_SERVER_ROOT_URL: http://localhost:3000
+  #     GF_INSTALL_PLUGINS: grafana-clock-panel
+  #   volumes:
+  #     - grafana-data:/var/lib/grafana
+  #     - ./grafana/provisioning:/etc/grafana/provisioning:ro
+  #   networks:
+  #     - dinamo-network
+  #   healthcheck:
+  #     test: [ "CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1" ]
+  #     interval: 15s
+  #     timeout: 5s
+  #     retries: 3
+  #   restart: unless-stopped
+
+  # =============================================================================
+  # VOLUMES
+  # =============================================================================
+volumes:
+  zookeeper-data:
+    driver: local
+  zookeeper-logs:
+    driver: local
+  kafka-1-data:
+    driver: local
+  kafka-2-data:
+    driver: local
+  kafka-3-data:
+    driver: local
+  spark-checkpoints:
+    driver: local
+  spark-data-lake:
+    driver: local
+  # prometheus-data:
+  #   driver: local
+  # grafana-data:
+  #   driver: local
+
+  # =============================================================================
+  # NETWORKS
+  # =============================================================================
+networks:
+  dinamo-network:
+    driver: bridge
+    name: dinamo-network
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16

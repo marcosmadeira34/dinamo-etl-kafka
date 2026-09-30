@@ -1,0 +1,46 @@
+#./dinamo_web/src/config/streaming_config.yaml
+# =============================================================================
+# Streaming Configuration — Dinamo ETL Platform
+# =============================================================================
+
+streaming:
+  # Trigger interval for micro-batch processing
+  trigger_interval: "2 seconds"
+
+  # Kafka consumer options for Spark
+  starting_offsets: "earliest"
+  max_offsets_per_trigger: 5000
+  fail_on_data_loss: false
+
+  # Watermark for late data handling
+  watermark_delay: "10 minutes"
+
+  # Output mode
+  output_mode: "append"
+
+  # Checkpoint paths
+  checkpoint_base_path: "/opt/spark/checkpoints"
+
+  # Data lake paths
+  data_lake:
+    bronze_path: "/opt/spark/DINAMO-DELTA-LAKE/BRONZE"
+    silver_path: "/opt/spark/DINAMO-DELTA-LAKE/SILVER"
+    gold_path: "/opt/spark/DINAMO-DELTA-LAKE/GOLD"
+
+  # Ingestion / file watcher
+  ingestion:
+    watch_prefix: "TO_CONVERT/"
+    poll_interval_sec: 30
+    file_extensions:
+      - ".txt"
+    # move_after_publish: false (Atualmente não faz mais sentido arqueteturalmente.)
+    processed_prefix: "PROCESSED/INGESTED/" 
+
+  # Spark tuning for streaming
+  spark:
+    adaptive_enabled: true
+    shuffle_partitions: 200
+    backpressure_enabled: true
+    max_rate_per_partition: 10000
+    state_store_provider: "org.apache.spark.sql.execution.streaming.state.HDFSBackedStateStoreProvider"
+    no_data_micro_batches: false

@@ -1,0 +1,29 @@
+# config.yaml
+s3:
+  bucket_name: "datafoundation-agtax-evollux-prd"
+  endpoint: "https://grpccupryrwv.compat.objectstorage.sa-saopaulo-1.oraclecloud.com"
+  paths:
+    sped_fiscal: "raw/sped_fiscal"
+    sped_contribuicoes: "raw/sped_contribuicoes"
+    cfop_table: "reference/cfop_table"
+    processed: "processed/sped"
+    tab_cfop: "TAB_CFOP"
+    processed_speds: "processed/speds"
+
+database:
+  url: "jdbc:postgresql://db.example.com:5432/dinamo"
+  properties:
+    user: "seu_usuario"
+    password: "sua_senha"
+    driver: "org.postgresql.Driver"
+  table:
+    entrada_saida: "Tab.Entrada_Saida_EFDF_EFDC"
+
+spark:
+  app_name: "DinamoWEB ETL"
+  adaptive:
+    enabled: true
+    coalescePartitions:
+      enabled: true
+    localShuffleReader:
+      enabled: true

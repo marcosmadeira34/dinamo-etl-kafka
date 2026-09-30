@@ -1,0 +1,1109 @@
+# dinamo_web/config/business_rules.yaml
+
+# Classificações para a coluna 'CRED-DEB CBS/IBS'
+credit_classifications:
+  cancelled_nf: "NF Cancelada"
+  fixed_assets: "Ativo Imobilizado"
+  services: "Servicos"
+  electricity: "Energia Eletrica"
+  freigth: "Frete"
+  other_operations: "Outros"
+  # Adicionar outras classificações conforme necessário
+
+  # Mapeamento do tipo de registro para a classificação
+record_to_classification_map:
+  "G110/G115": "fixed_assets"
+  "A100/A170": "services"
+  "C500/C501/C505": "electricity"
+  "D100/D101/D105": "freigth"
+  "F100": "other_operations"
+  "F120/F130": "fixed_assets"
+  # Adicionar outras classificações conforme necessário
+
+  # Codigos de situacao do documento que indicam cancelamento
+cancelled_situations:
+  - "02 - Nota Fiscal Cancelada"
+  - "04 - Nota Fiscal Denegada"
+  - "05 - Nota Fiscal Inutilizada"
+
+# Codigos de situacao do documento (sem descricao) para facilitar o filtro
+cancelled_situation_codes:
+  - "02"
+  - "04"
+  - "05"
+
+# Filtros para os blocos lógicos
+# Registros que vêm do SPED Contribuicoes e sao tratados como "Servicos e Outros"
+sped_contribuicoes_service_records:
+  - "A100/A170"
+  - "F100"
+
+# Registros que devem ser excluidos da busca por match de saida
+sped_contribuicoes_exclude_from_match:
+  - "A100/A170"
+  - "F100"
+
+# Strings constantes
+origin_system:
+  sped_fiscal: "SPED Fiscal"
+  sped_contribuicoes: "SPED Contribuicoes"
+
+# config.yaml (estrutura esperada pelo código)
+regime_tributario:
+  bucket_name: "datafoundation-agtax-evollux-prd"
+  path: "REGIME_TRIBUTARIO/"
+
+# Tabela CFOP
+tabela_cfop:
+  bucket_name: "datafoundation-agtax-evollux-prd"
+  path: "TABELA_CFOP/"
+
+# Arquivo JSON com os registros e seus pais mapeados
+identify_parents:
+  path: "./dinamo_etl_project/identify_parents.json"
+
+codigo_situacao_documento_mapping:
+  "00": "00 - DOCUMENTO REGULAR"
+  "01": "01 - ESCRITURACAO EXTEMPORANEA DE DOCUMENTO REGULAR"
+  "02": "02 - DOCUMENTO CANCELADO"
+  "03": "03 - ESCRITURACAO EXTEMPORANEA DE DOCUMENTO CANCELADO"
+  "04": "04 - NFE OU CTE - DENEGADO"
+  "05": "05 - NFE OU CTE - NUMERACAO INUTILIZADA"
+  "06": "06 - DOCUMENTO FISCAL COMPLEMENTAR"
+  "07": "07 - ESCRITURACAO EXTEMPORANEA DE DOCUMENTO COMPLEMENTAR"
+  "08": "08 - DOCUMENTO FISCAL REGIME ESPECIAL OU NORMA ESPECIFICA"
+
+parent_child_mapping_fiscal:
+  # Nível 0: Abertura do Arquivo
+  - parent: "0000"
+    children:
+      [
+        "0001",
+        "0300",
+        "0990",
+        "B001",
+        "B990",
+        "C001",
+        "C990",
+        "D001",
+        "D990",
+        "E001",
+        "E990",
+        "G001",
+        "G990",
+        "H001",
+        "H990",
+        "K001",
+        "K990",
+        "1001",
+        "1990",
+        "9001",
+        "9990",
+        "9999",
+      ] # [3-5]
+
+  # Bloco 0: Abertura e Tabelas
+  - parent: "0001" # Nível 1
+    children:
+      [
+        "0002",
+        "0005",
+        "0015",
+        "0100",
+        "0150",
+        "0190",
+        "0200",
+        "0300",
+        "0400",
+        "0450",
+        "0460",
+        "0500",
+        "0600",
+      ] # [6-8]
+  - parent: "0150"
+    children: [ "0175" ] # [7, 9]
+  - parent: "0200"
+    children: [ "0205", "0206", "0210", "0220", "0221" ] # [7, 10]
+  - parent: "0300"
+    children: [ "0305" ] # [8, 11]
+
+  # Bloco B: ISS (Exclusivo DF)
+  - parent: "B001"
+    children: [ "B020", "B030", "B350", "B420", "B440", "B460", "B470", "B500" ] # [8, 12, 13]
+  - parent: "B020"
+    children: [ "B025" ] # [12, 14]
+  - parent: "B030"
+    children: [ "B035" ] # [12, 15]
+  - parent: "B500"
+    children: [ "B510" ] # [13, 16]
+
+  # Bloco C: Documentos Fiscais - Mercadorias
+  - parent: "C001"
+    children:
+      [
+        "C100",
+        "C300",
+        "C350",
+        "C400",
+        "C495",
+        "C500",
+        "C600",
+        "C700",
+        "C800",
+        "C860",
+      ] # [13, 17]
+  - parent: "C100"
+    children:
+      [
+        "C101",
+        "C105",
+        "C110",
+        "C120",
+        "C130",
+        "C140",
+        "C160",
+        "C165",
+        "C170",
+        "C185",
+        "C186",
+        "C190",
+        "C195",
+      ] # [18, 19]
+  - parent: "C110"
+    children: [ "C111", "C112", "C113", "C114", "C115", "C116" ] # [20]
+  - parent: "C140"
+    children: [ "C141" ] # [21, 22]
+  - parent: "C170"
+    children:
+      [
+        "C171",
+        "C172",
+        "C173",
+        "C174",
+        "C175",
+        "C176",
+        "C177",
+        "C178",
+        "C179",
+        "C180",
+        "C181",
+      ] # [21, 23]
+  - parent: "C190"
+    children: [ "C191" ] # [19, 24]
+  - parent: "C195"
+    children: [ "C197" ] # [25, 26]
+  - parent: "C300"
+    children: [ "C310", "C320" ] # [25, 27]
+  - parent: "C320"
+    children: [ "C321" ] # [25, 28]
+  - parent: "C321"
+    children: [ "C330" ] # [25, 29]
+  - parent: "C350"
+    children: [ "C370", "C380", "C390" ] # [30]
+  - parent: "C400"
+    children: [ "C405" ] # [30, 31]
+  - parent: "C405"
+    children: [ "C410", "C420", "C460", "C490" ] # [30, 32]
+  - parent: "C420"
+    children: [ "C425", "C430" ] # [32]
+  - parent: "C460"
+    children: [ "C465", "C470", "C480" ] # [32, 33]
+  - parent: "C500"
+    children: [ "C510", "C590", "C595" ] # [34]
+  - parent: "C590"
+    children: [ "C591", "C597" ] # [34, 35]
+  - parent: "C600"
+    children: [ "C601", "C610", "C690" ] # [35, 36]
+  - parent: "C700"
+    children: [ "C790" ] # [36, 37]
+  - parent: "C790"
+    children: [ "C791" ] # [36, 38]
+  - parent: "C800"
+    children: [ "C810", "C850", "B855" ] # [39]
+  - parent: "C810"
+    children: [ "C815" ] # [39, 40]
+  - parent: "C855"
+    children: [ "C857" ] # [39, 41]
+  - parent: "C860"
+    children: [ "C870", "C880", "C890", "C895" ] # [17]
+  - parent: "C895"
+    children: [ "C897" ] # [17, 42]
+
+  # Bloco D: Documentos Fiscais - Serviços
+  - parent: "D001"
+    children:
+      [
+        "D100",
+        "D300",
+        "D350",
+        "D400",
+        "D500",
+        "D600",
+        "D695",
+        "D700",
+        "D750",
+      ] # [43, 44]
+  - parent: "D100"
+    children:
+      [
+        "D101",
+        "D110",
+        "D130",
+        "D140",
+        "D150",
+        "D160",
+        "D170",
+        "D180",
+        "D190",
+        "D195",
+      ] # [45, 46]
+  - parent: "D110"
+    children: [ "D120" ] # [45, 47]
+  - parent: "D160"
+    children: [ "D161", "D162" ] # [47]
+  - parent: "D195"
+    children: [ "D197" ] # [46, 48]
+  - parent: "D300"
+    children: [ "D301", "D310" ] # [49]
+  - parent: "D350"
+    children: [ "D355" ] # [49]
+  - parent: "D355"
+    children: [ "D360", "D365", "D390" ] # [49, 50]
+  - parent: "D365"
+    children: [ "D370" ] # [50, 51]
+  - parent: "D400"
+    children: [ "D410", "D420" ] # [50]
+  - parent: "D410"
+    children: [ "D411" ] # [50, 52]
+  - parent: "D500"
+    children: [ "D510", "D530", "D590" ] # [53]
+  - parent: "D600"
+    children: [ "D610", "D690" ] # [54]
+  - parent: "D695"
+    children: [ "D696" ] # [54]
+  - parent: "D696"
+    children: [ "D697" ] # [54, 55]
+  - parent: "D700"
+    children: [ "D730", "D735" ] # [56]
+  - parent: "D730"
+    children: [ "D731" ] # [56, 57]
+  - parent: "D735"
+    children: [ "D737" ] # [56, 58]
+  - parent: "D750"
+    children: [ "D760" ] # [44]
+  - parent: "D760"
+    children: [ "D761" ] # [44, 59]
+
+  # Bloco E: Apuração do ICMS e IPI
+  - parent: "E001"
+    children: [ "E100", "E200", "E300", "E500" ] # [44, 60]
+  - parent: "E100"
+    children: [ "E110" ] # [44, 61]
+  - parent: "E110"
+    children: [ "E111", "E115", "E116" ] # [44, 62]
+  - parent: "E111"
+    children: [ "E112", "E113" ] # [62]
+  - parent: "E200"
+    children: [ "E210" ] # [62, 63]
+  - parent: "E210"
+    children: [ "E220", "E250" ] # [62, 64]
+  - parent: "E220"
+    children: [ "E230", "E240" ] # [64]
+  - parent: "E300"
+    children: [ "E310" ] # [64, 65]
+  - parent: "E310"
+    children: [ "E311", "E312", "E313", "E316" ] # [64, 66]
+  - parent: "E500"
+    children: [ "E510", "E520" ] # [60]
+  - parent: "E520"
+    children: [ "E530" ] # [60, 67]
+  - parent: "E530"
+    children: [ "E531" ] # [60, 68]
+
+  # Bloco G: Ativo Permanente (CIAP)
+  - parent: "G001"
+    children: [ "G110" ] # [60, 69]
+  - parent: "G110"
+    children: [ "G125" ] # [60, 70]
+  - parent: "G125"
+    children: [ "G126", "G130" ] # [60, 71]
+  - parent: "G130"
+    children: [ "G140" ] # [71, 72]
+
+  # Bloco H: Inventário Físico
+  - parent: "H001"
+    children: [ "H005" ] # [71, 73]
+  - parent: "H005"
+    children: [ "H010" ] # [71, 74]
+  - parent: "H010"
+    children: [ "H020", "H030" ] # [71]
+
+  # Bloco K: Controle da Produção e Estoque
+  - parent: "K001"
+    children: [ "K010", "K100" ] # [75]
+  - parent: "K100"
+    children:
+      [
+        "K200",
+        "K210",
+        "K220",
+        "K230",
+        "K250",
+        "K260",
+        "K270",
+        "K280",
+        "K290",
+        "K300",
+      ] # [75, 76]
+  - parent: "K210"
+    children: [ "K215" ] # [75, 77]
+  - parent: "K230"
+    children: [ "K235" ] # [78, 79]
+  - parent: "K250"
+    children: [ "K255" ] # [78, 80]
+  - parent: "K260"
+    children: [ "K265" ] # [78, 81]
+  - parent: "K270"
+    children: [ "K275" ] # [78, 82]
+  - parent: "K290"
+    children: [ "K291", "K292" ] # [76]
+  - parent: "K300"
+    children: [ "K301", "K302" ] # [76]
+
+  # Bloco 1: Outras Informações
+  - parent: "1001"
+    children:
+      [
+        "1010",
+        "1100",
+        "1200",
+        "1250",
+        "1300",
+        "1350",
+        "1390",
+        "1400",
+        "1500",
+        "1601",
+        "1700",
+        "1800",
+        "1900",
+        "1960",
+        "1970",
+        "1980",
+      ] # [83, 84]
+  - parent: "1100"
+    children: [ "1105" ] # [83, 85]
+  - parent: "1105"
+    children: [ "1110" ] # [83, 86]
+  - parent: "1200"
+    children: [ "1210" ] # [83, 87]
+  - parent: "1250"
+    children: [ "1255" ] # [88, 89]
+  - parent: "1300"
+    children: [ "1310" ] # [88, 90]
+  - parent: "1310"
+    children: [ "1320" ] # [88, 91]
+  - parent: "1350"
+    children: [ "1360", "1370" ] # [88]
+  - parent: "1390"
+    children: [ "1391" ] # [88, 92]
+  - parent: "1500"
+    children: [ "1510" ] # [88, 93]
+  - parent: "1700"
+    children: [ "1710" ] # [94, 95]
+  - parent: "1900"
+    children: [ "1910" ] # [94, 96]
+  - parent: "1910"
+    children: [ "1920" ] # [94, 97]
+  - parent: "1920"
+    children: [ "1921", "1925", "1926" ] # [98]
+  - parent: "1921"
+    children: [ "1922", "1923" ] # [98]
+  - parent: "1970"
+    children: [ "1975" ] # [84, 99]
+
+  # Bloco 9: Controle e Encerramento
+  - parent: "9001"
+    children: [ "9900" ] # [4, 100]
+
+
+inheritance_fields:
+  C170:
+    from: C100
+    fields: []
+
+
+# =========================================================
+# CONFIGURAÇÕES DE REGISTROS PARA CONSTRUÇÃO DA CAMADA GOLD
+# =========================================================
+
+FISCAL_0000_C100_C170_C190:
+  name: FISCAL_0000_C100_C170_C190
+  base_entity: C100
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, NOME, CNPJ, DT_INI, UF, OBRIG_ACESS ]
+    C100:
+      source: C100
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields:
+        [
+          IND_EMIT,
+          COD_SIT,
+          NUM_DOC,
+          SER,
+          COD_MOD,
+          CHV_NFE,
+          DT_DOC,
+          DT_E_S,
+          COD_PART,
+        ]
+
+    C170:
+      source: C170
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: C100
+      fields:
+        [
+          NUM_ITEM,
+          DESCR_COMPL,
+          QTD,
+          UNID,
+          VL_ITEM,
+          VL_DESC,
+          IND_MOV,
+          CST_ICMS,
+          CFOP,
+          DESC_CFOP,
+          NAT_CFOP,
+          COD_NAT,
+          VL_BC_ICMS,
+          ALIQ_ICMS,
+          VL_ICMS_ITEM,
+          VL_BC_ICMS_ST,
+          ALIQ_ST,
+          VL_ICMS_ST,
+          IND_APUR,
+          CST_IPI,
+          COD_ENQ,
+          VL_BC_IPI,
+          ALIQ_IPI,
+          VL_IPI,
+          CST_PIS,
+          VL_BC_PIS,
+          ALIQ_PIS_PERC,
+          QUANT_BC_PIS,
+          ALIQ_PIS_RS,
+          VL_PIS,
+          CST_COFINS,
+          VL_BC_COFINS,
+          ALIQ_COFINS_PERC,
+          QUANT_BC_COFINS,
+          ALIQ_COFINS_RS,
+          VL_COFINS,
+          COD_CTA,
+          VL_ABAT_NT,
+          CRED_DEB_CBS_IBS,
+          COD_ITEM,
+        ]
+    C190:
+      source: C190
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: C100
+      fields: [ VL_OPR, VL_ICMS_TOTAL, VL_RED_BC, COD_OBS ]
+
+FISCAL_0000_C500_C510_C590:
+  name: FISCAL_0000_C500_C510_C590
+  base_entity: C500
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, OBRIG_ACESS, NOME, CNPJ, UF, DT_INI ]
+    C500:
+      source: C500
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: [ IND_OPER, IND_EMIT, NUM_DOC, DT_DOC, COD_PART ]
+    C510:
+      source: C510
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: C500
+      fields:
+        [
+          NUM_ITEM,
+          COD_ITEM,
+          COD_CLASS,
+          QTD,
+          UNID,
+          VL_ITEM,
+          VL_DESC,
+          IND_REC,
+          VL_PIS,
+          VL_COFINS,
+          COD_CTA,
+          CFOP,
+          VL_ICMS,
+        ]
+    C590:
+      source: C590
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: C500
+      fields: [ VL_OPR, VL_RED_BC, COD_OBS ]
+
+FISCAL_0000_D500_D590:
+  name: FISCAL_0000_D500_D590
+  base_entity: D500
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, OBRIG_ACESS, NOME, CNPJ, UF, DT_INI ]
+    D500:
+      source: D500
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields:
+        [
+          IND_OPER,
+          IND_EMIT,
+          COD_PART,
+          COD_MOD,
+          COD_SIT,
+          SER,
+          SUB,
+          NUM_DOC,
+          DT_DOC,
+          DT_A_P,
+          VL_DOC,
+          VL_DESC,
+          VL_SERV,
+          VL_SERV_NT,
+          VL_TERC,
+          VL_DA,
+          VL_ICMS_TOTAL,
+          COD_INF,
+          VL_PIS,
+          VL_COFINS,
+          COD_CTA,
+          TP_ASSINANTE,
+        ]
+    D590:
+      source: D590
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: D500
+      fields:
+        [
+          CST_ICMS,
+          CFOP,
+          ALIQ_ICMS,
+          VL_OPR,
+          VL_ICMS_ANALITICO,
+          VL_BC_ICMS_UF,
+          VL_ICMS_UF,
+          VL_RED_BC,
+          COD_OBS,
+        ]
+
+FISCAL_0000_E110:
+  name: FISCAL_0000_E110
+  base_entity: E100
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, OBRIG_ACESS, NOME, CNPJ, UF, DT_INI ]
+
+    E100:
+      source: E100
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: []
+    E110:
+      source: E110
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: E100
+      fields:
+
+        [
+          VL_TOT_DEBITOS,
+          VL_AJ_DEBITOS,
+          VL_TOT_AJ_DEBITOS,
+          VL_ESTORNOS_CRED,
+          VL_TOT_CREDITOS,
+          VL_AJ_CREDITOS,
+          VL_TOT_AJ_CREDITOS,
+          VL_ESTORNOS_DEB,
+          VL_SLD_CREDOR_ANT,
+          VL_SLD_APURADO,
+          VL_TOT_DED,
+          VL_ICMS_RECOLHER,
+          VL_SLD_CREDOR_TRANSPORTAR,
+          DEB_ESP,
+        ]
+
+FISCAL_0000_E111:
+  name: FISCAL_0000_E111
+  base_entity: E110
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, OBRIG_ACESS, NOME, CNPJ, UF, DT_INI ]
+
+    E110:
+      source: E110
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: []
+    E111:
+      source: E111
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: E110
+      fields: [ COD_AJ_APUR, DESC_COMPL_AJ, VL_AJ_APUR ]
+
+FISCAL_0000_E210:
+  name: FISCAL_0000_E210
+  base_entity: E200
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, OBRIG_ACESS, NOME, CNPJ, UF, DT_INI ]
+
+    E200:
+      source: E200
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: []
+    E210:
+      source: E210
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: E200
+      fields:
+        [
+          IND_MOV_ST,
+          VL_SLD_CRED_ANT_ST,
+          VL_DEVOL_ST,
+          VL_RESSARC_ST,
+          VL_OUT_CRED_ST,
+          VL_AJ_CREDITOS_ST,
+          VL_RETENCAO_ST,
+          VL_OUT_DEB_ST,
+          VL_AJ_DEBITOS_ST,
+          VL_SLD_DEV_ANT_ST,
+          VL_DEDUCOES_ST,
+          VL_ICMS_RECOL_ST,
+          VL_SLD_CRED_ST_TRANSPORTAR,
+          DEB_ESP_ST,
+        ]
+
+FISCAL_0000_E220:
+  name: FISCAL_0000_E220
+  base_entity: E210
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, OBRIG_ACESS, NOME, CNPJ, UF, DT_INI ]
+    E210:
+      source: E210
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: []
+    E220:
+      source: E220
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: E210
+      fields: [ COD_AJ_APUR, DESC_COMPL_AJ, VL_AJ_APUR ]
+
+FISCAL_0000_E250:
+  name: FISCAL_0000_E250
+  base_entity: E210
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, OBRIG_ACESS, NOME, CNPJ, UF, DT_INI ]
+    E210:
+      source: E210
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: []
+    E250:
+      source: E250
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: E210
+      fields:
+        [
+          COD_OR,
+          VL_OR,
+          DT_VCTO,
+          COD_REC,
+          NUM_PROC,
+          IND_PROC,
+          PROC,
+          TXT_COMPL,
+          MES_REF,
+        ]
+
+FISCAL_0000_D100_D190:
+  name: FISCAL_0000_D100_D190
+  base_entity: D100
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, OBRIG_ACESS, NOME, CNPJ, UF, DT_INI ]
+    D100:
+      source: D100
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields:
+        [
+          IND_OPER,
+          IND_EMIT,
+          COD_PART,
+          COD_MOD,
+          COD_SIT,
+          SER,
+          SUB,
+          NUM_DOC,
+          CHV_CTE,
+          DT_DOC,
+          DT_A_P,
+          TP_CT_E,
+          CHV_CTE_REF,
+          VL_DOC,
+          VL_DESC,
+          IND_FRT,
+          VL_SERV,
+          VL_BC_ICMS,
+          VL_ICMS,
+          VL_NT,
+          COD_INF,
+          COD_CTA,
+          COD_MUN_ORIG,
+          COD_MUN_DEST,
+        ]
+    D190:
+      source: D190
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: D100
+      fields:
+        [
+          CST_ICMS,
+          CFOP,
+          ALIQ_ICMS_ITEM,
+          VL_OPR_ITEM,
+          VL_BC_ICMS_ITEM,
+          VL_ICMS_ITEM,
+          VL_RED_BC_ITEM,
+          COD_OBS,
+        ]
+
+FISCAL_0000_0300_G110_G125_G130:
+  name: FISCAL_0000_0300_G110_G125_G130
+  base_entity: G100
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, OBRIG_ACESS, NOME, CNPJ, UF, DT_INI ]
+    "0300":
+      source: "0300"
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: "0000"
+      fields: [ COD_IND_BEM, IDENT_MERC, DESCR_ITEM, COD_PRNC, COD_CTA, NR_PARC ]
+    G100:
+      source: G100
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      fields: []
+
+    G110:
+      source: G110
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: G100
+      fields:
+        [
+          DT_INI,
+          DT_FIN,
+          SALDO_IN_ICMS,
+          SOM_PARC,
+          VL_TRIB_EXP,
+          VL_TOTAL,
+          IND_PER_SAI,
+          ICMS_APROP,
+          SOM_ICMS_OC,
+        ]
+    G125:
+      source: G125
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: G110
+      fields:
+        [
+          COD_IND_BEM,
+          DT_MOV,
+          TIPO_MOV,
+          VL_IMOB_ICMS_OP,
+          VL_IMOB_ICMS_ST,
+          VL_IMOB_ICMS_FRT,
+          VL_IMOB_ICMS_DIF,
+          NUM_PARC,
+          VL_PARC_PASS,
+        ]
+    G130:
+      source: G130
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: G125
+      fields:
+        [
+          IND_EMIT,
+          COD_PART,
+          COD_MOD,
+          SERIE,
+          NUM_DOC,
+          CHV_NFE_CTE,
+          DT_DOC,
+          NUM_DA,
+        ]
+
+FISCAL_RELATORIO_GERAL:
+  name: FISCAL_RELATORIO_GERAL
+  description: "Relatorio geral do SPED Fiscal"
+
+  documents_sources:
+    C100_C170_C190:
+      reg_type: "C100/C170/C190"
+      base: C100
+      children:
+        - source: C170
+          join_on: _parent_uid_final
+          join_to: _row_id
+          fields:
+            - FILE_ID
+            # incluir mais campos
+
+    C500_C510_C590:
+      source: C500
+      reg_type: C500/C510/C590
+      base: C500
+      children:
+        - source: C510
+          join_on: _parent_uid_final
+          join_to: _row_id
+          fields: # incluir mais campos
+    D500_D590:
+      source: D500
+      reg_type: D500/D590
+      base: D500
+      children:
+        - source: D590
+          join_on: _parent_uid_final
+          join_to: _row_id
+          fields: # incluir mais campos
+    D100_D190:
+      source: D100
+      reg_type: D100/D190
+      base: D100
+      children:
+        - source: D190
+          join_on: _parent_uid_final
+          join_to: _row_id
+          fields: # incluir mais campos
+    E110:
+      source: E110
+      reg_type: E110
+      base: E110
+      children:
+        - source: E111
+          join_on: _parent_uid_final
+          join_to: _row_id
+          fields: # incluir mais campos
+    E111:
+      source: E111
+      reg_type: E111
+      base: E111
+      children:
+        - source: E112
+          join_on: _parent_uid_final
+          join_to: _row_id
+          fields: # incluir mais campos
+    E210:
+      source: E210
+      reg_type: E210
+      base: E210
+      children:
+        - source: E211
+          join_on: _parent_uid_final
+          join_to: _row_id
+          fields: # incluir mais campos
+    E220:
+      source: E220
+      reg_type: E220
+      base: E220
+      children:
+        - source: E221
+          join_on: _parent_uid_final
+          join_to: _row_id
+          fields: # incluir mais campos
+    E250:
+      source: E250
+      reg_type: E250
+      base: E250
+      children:
+        - source: E251
+          join_on: _parent_uid_final
+          join_to: _row_id
+          fields: # incluir mais campos
+        - source: E252
+          join_on: _parent_uid_final
+          join_to: _row_id
+          fields: # incluir mais campos
+    G100_G110_G125_G130:
+      source: G100
+      reg_type: G100/G110/G125/G130
+      base: G100
+      children:
+        - source: G110
+          join_on: _parent_uid_final
+          join_to: _row_id
+          fields: # incluir mais campos
+        - source: G125
+          join_on: _parent_uid_final
+          join_to: _row_id
+          fields: # incluir mais campos
+        - source: G130
+          join_on: _parent_uid_final
+          join_to: _row_id
+          fields: # incluir mais campos
+  enrichments:
+    dados_arquivo:
+      source: "0000"
+      join_type: left
+      join_keys:
+        - FILE_ID: FILE_ID
+      fields:
+        - CNPJ
+        - NOME
+        - DT_INI
+        - UF
+        - OBRIG_ACESS
+
+    participante:
+      source: "0150"
+      join_type: left
+      join_keys:
+        - { COD_PART: CNPJ_PARTICIPANTE }
+        - { COD_PART: CPF_PARTICIPANTE }
+      join_mode: coalesce
+      fields:
+        - NOME_PARTICIPANTE
+        - COD_PAIS
+        - IE_PARTICIPANTE
+        - COD_MUN_PARTICIPANTE
+        - SUFRAMA_PARTICIPANTE
+        - END_PARTICIPANTE
+        - NUM_PARTICIPANTE
+        - COMPL_PARTICIPANTE
+        - BAIRRO_PARTICIPANTE
+
+    item:
+      source: "0200"
+      join_type: left
+      join_keys:
+        - COD_ITEM: COD_ITEM
+      fields:
+        - DESCR_ITEM
+        - COD_BARRA
+        - COD_ANT_ITEM
+        - UNID_INV
+        - TIPO_ITEM
+        - COD_NCM
+        - EX_IPI
+        - COD_GEN
+        - COD_LST
+        - ALIQ_ICMS
+
+    conta_contabil:
+      source: "0500"
+      join_type: left
+      join_keys:
+        - COD_CTA: COD_CTA
+      fields:
+        - NOME_CTA
+
+# table_consulta_spedf_069_geral:
+#   name: 069_GERAL
+#   registros: [ "069_GERAL" ]
+#   base_entity: 069_GERAL
+#   entities:
+#     # =========================
+#     # CONSOLIDADO DO PERÍODO
+#     # =========================
+#     069_GERAL:
+#       source: 069_GERAL
+#       uid: _row_id
+#       fields:
+#         - DT_INI
+#         - DT_FIN
+#         - SALDO_IN_ICMS
+#         - SOM_PARC
+#         - VL_TRIB_EXP
+#         - VL_TOTAL
+#         - IND_PER_SAI
+#         - ICMS_APROP
+#         - SOM_ICMS_OC
+
+#     # =========================
+#     # MOVIMENTAÇÕES DO ATIVO
+#     # =========================
+#     G125:
+#       source: G125
+#       join_on: _parent_uid_final
+#       join_to: _row_id
+#       fields:
+#         - TIPO_MOV
+#         - VL_IMOB_ICMS_ST
+#         - VL_IMOB_ICMS_FRT
+#         - VL_IMOB_ICMS_DIF
+#         - NUM_PARC
+#         - VL_PARC_PASS
+#   reorder_columns_fiscal_imobilizado:
+#     fields:
+#       - FILE_ID
+#       - OBRIG_ACESS
+#       - DT_INI
+#       - DT_FIN
+#       - SALDO_IN_ICMS
+#       - SOM_PARC
+#       - VL_TRIB_EXP
+#       - VL_TOTAL
+#       - IND_PER_SAI
+#       - ICMS_APROP
+#       - SOM_ICMS_OC
+#       - TIPO_MOV
+#       - VL_IMOB_ICMS_ST
+#       - VL_IMOB_ICMS_FRT
+#       - VL_IMOB_ICMS_DIF
+#       - NUM_PARC
+#       - VL_PARC_PASS

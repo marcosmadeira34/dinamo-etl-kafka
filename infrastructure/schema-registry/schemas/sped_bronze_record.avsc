@@ -1,0 +1,17 @@
+{
+  "type": "record",
+  "name": "SpedBronzeRecord",
+  "namespace": "com.dinamo.sped.events",
+  "doc": "Parsed SPED record from Bronze layer",
+  "fields": [
+    {"name": "row_id", "type": "long"},
+    {"name": "file_id", "type": "string"},
+    {"name": "sped_type", "type": "string"},
+    {"name": "register_type", "type": "string", "doc": "REG value: C100, C170, 0000, etc"},
+    {"name": "raw_value", "type": "string", "doc": "Original pipe-delimited line"},
+    {"name": "cols", "type": {"type": "array", "items": ["null", "string"]}, "doc": "Split fields array"},
+    {"name": "source_file", "type": "string"},
+    {"name": "parent_uid", "type": ["null", "long"], "default": null},
+    {"name": "event_timestamp_ms", "type": "long"}
+  ]
+}

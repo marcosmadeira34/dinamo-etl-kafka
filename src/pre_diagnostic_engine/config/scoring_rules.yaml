@@ -1,0 +1,36 @@
+classification:
+  oportunidade_altissima:
+    min: 80
+    max: 999
+  oportunidade_forte:
+    min: 60
+    max: 79
+  oportunidade_moderada:
+    min: 40
+    max: 59
+  baixa_atratividade:
+    min: 20
+    max: 39
+  no_go:
+    min: 0
+    max: 19
+
+weights:
+  lucro_real:
+    points: 30
+  patrimonio_positivo:
+    points: 10
+  lucro_fiscal:
+    points: 20
+  retencoes:
+    points: 15
+  darf_pago:
+    points: 15
+  oportunidade_l300:
+    points: 20
+  oportunidade_m310:
+    points: 20
+  prejuizo_recorrente:
+    points: -25
+  ausencia_darf:
+    points: -20

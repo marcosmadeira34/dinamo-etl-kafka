@@ -1,0 +1,3 @@
+tabela_cfop:
+  bucket_name: "datafoundation-agtax-evollux-prd"
+  path: "TABELA_CFOP/"

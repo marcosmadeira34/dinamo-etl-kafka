@@ -1,0 +1,4 @@
+go_no_go_rules:
+  max_sequential_presumido_years: 5
+  required_regime: "RRRR'"  # R for Lucro Real
+  min_pl_threshold: 0.0

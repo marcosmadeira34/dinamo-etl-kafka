@@ -1,0 +1,14 @@
+regime_rules:
+  lucro_real:
+    code: "RRRR"
+    description: "Lucro Real"
+    points: 30
+    go: true
+  lucro_presumido:
+    code: "P"
+    description: "Lucro Presumido"
+    points: 10
+    go: false
+  no_go_presumido_sequencial:
+    years: 5
+    classification: "NO_GO"

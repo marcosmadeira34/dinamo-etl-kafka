@@ -1,0 +1,2 @@
+retention_rules:
+  divergence_tolerance_percent: 5.0

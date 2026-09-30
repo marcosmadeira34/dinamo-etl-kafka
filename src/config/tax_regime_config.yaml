@@ -1,0 +1,3 @@
+regime_tributario:
+  bucket_name: "datafoundation-agtax-evollux-prd"
+  path: "REGIME_TRIBUTARIO/"

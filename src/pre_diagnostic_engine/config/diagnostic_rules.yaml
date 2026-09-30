@@ -1,0 +1,4 @@
+diagnostic_rules:
+  min_patrimonio_liquido: 0.0
+  min_lucro_contabil: 0.0
+  min_lucro_fiscal: 0.0

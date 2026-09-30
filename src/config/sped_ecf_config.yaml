@@ -1,0 +1,427 @@
+regime_tributario:
+  bucket_name: "datafoundation-agtax-evollux-prd"
+  path: "REGIME_TRIBUTARIO/"
+
+tabela_cfop:
+  bucket_name: "datafoundation-agtax-evollux-prd"
+  path: "TABELA_CFOP/"
+
+parent_child_mapping_ecf:
+  # Nível 0: Abertura e Identificação da Pessoa Jurídica
+  - parent: "0000" # Nível 0
+    children:
+      [
+        "0001",
+        "0010",
+        "0990",
+        "C001",
+        "C990",
+        "E001",
+        "E990",
+        "J001",
+        "J990",
+        "K001",
+        "K990",
+        "L001",
+        "L990",
+        "M001",
+        "M990",
+        "N001",
+        "N990",
+        "P001",
+        "P990",
+        "Q001",
+        "Q990",
+        "S001",
+        "S990",
+        "T001",
+        "T990",
+        "U001",
+        "U990",
+        "V001",
+        "V990",
+        "W001",
+        "W990",
+        "X001",
+        "X990",
+        "Y001",
+        "Y990",
+        "9001",
+        "9099",
+        "9999",
+      ] # [4-45]
+
+  # Bloco 0: Abertura e Parâmetros
+  - parent: "0001" # Nível 1
+    children: [ "0010", "0020", "0021", "0030", "0035", "0930" ] # [4, 5]
+
+  # Bloco C: Informações Recuperadas da ECD
+  - parent: "C001" # Nível 1
+    children: [ "C040" ] # [5]
+  - parent: "C040" # Nível 2
+    children: [ "C050", "C100", "C150", "C350" ] # [5-7]
+  - parent: "C050" # Nível 3
+    children: [ "C051", "C053" ] # [5]
+  - parent: "C150" # Nível 3
+    children: [ "C155" ] # [6, 46]
+  - parent: "C155" # Nível 4
+    children: [ "C157" ] # [6, 47]
+  - parent: "C350" # Nível 3
+    children: [ "C355" ] # [7, 48]
+
+  # Bloco E: Informações Recuperadas da ECF Anterior
+  - parent: "E001" # Nível 1
+    children: [ "E010", "E020", "E030" ] # [7, 8]
+  - parent: "E010" # Nível 2
+    children: [ "E015" ] # [8, 49, 50]
+  - parent: "E030" # Nível 2
+    children: [ "E155", "E355" ] # [8, 9, 51]
+
+  # Bloco J: Plano de Contas e Mapeamento
+  - parent: "J001" # Nível 1
+    children: [ "J050", "J100" ] # [9, 11]
+  - parent: "J050" # Nível 2
+    children: [ "J051", "J053" ] # [9, 11, 52]
+
+  # Bloco K: Saldos das Contas Contábeis e Referenciais
+  - parent: "K001" # Nível 1
+    children: [ "K030" ] # [12]
+  - parent: "K030" # Nível 2
+    children: [ "K155", "K355", "K915", "K935" ] # [12-15, 53]
+  - parent: "K155" # Nível 3
+    children: [ "K156" ] # [13, 54]
+  - parent: "K355" # Nível 3
+    children: [ "K356" ] # [55, 56]
+
+  # Bloco L: Lucro Líquido – Lucro Real
+  - parent: "L001" # Nível 1
+    children: [ "L030" ] # [15, 57]
+  - parent: "L030" # Nível 2
+    children: [ "L100", "L200", "L210", "L300" ] # [15-18, 58]
+
+  # Bloco M: e-Lalur e e-Lacs
+  - parent: "M001" # Nível 1
+    children: [ "M010", "M030" ] # [18, 19, 59]
+  - parent: "M030" # Nível 2
+    children: [ "M300", "M350", "M410", "M510" ] # [19, 22, 60-62]
+  - parent: "M300" # Nível 3
+    children: [ "M305", "M310", "M315" ] # [19, 20, 63]
+  - parent: "M310" # Nível 4
+    children: [ "M312" ] # [20, 64]
+  - parent: "M350" # Nível 3
+    children: [ "M355", "M360", "M365" ] # [22, 65]
+  - parent: "M360" # Nível 4
+    children: [ "M362" ] # [22, 66]
+  - parent: "M410" # Nível 3
+    children: [ "M415" ] # [61, 67]
+
+  # Bloco N: Cálculo do IRPJ e CSLL - Lucro Real
+  - parent: "N001" # Nível 1
+    children: [ "N030" ] # [68]
+  - parent: "N030" # Nível 2
+    children: [ "N500", "N600", "N610", "N620", "N630", "N650", "N660", "N670" ] # [23, 24, 69]
+  - parent: "N600" # Nível 3
+    children: [ "N605" ] # [24, 70]
+
+  # Bloco P: Lucro Presumido
+  - parent: "P001" # Nível 1
+    children: [ "P030" ] # [71]
+  - parent: "P030" # Nível 2
+    children: [ "P100", "P130", "P150", "P200", "P230", "P300", "P400", "P500" ] # [25, 26, 72]
+
+  # Bloco Q: Livro Caixa
+  - parent: "Q001" # Nível 1
+    children: [ "Q100" ] # [27, 73]
+
+  # Bloco S: Instituições do Sistema Financeiro e Assemelhadas
+  - parent: "S001" # Nível 1
+    children: [ "S030" ] # [27, 74]
+  - parent: "S030" # Nível 2
+    children: [ "S100", "S150", "S200", "S300", "S500", "S700" ] # [28, 29, 75]
+
+  # Bloco T: Lucro Arbitrado
+  - parent: "T001" # Nível 1
+    children: [ "T030" ] # [76]
+  - parent: "T030" # Nível 2
+    children: [ "T120", "T150", "T170", "T181" ] # [77]
+
+  # Bloco U: Imunes e Isentas
+  - parent: "U001" # Nível 1
+    children: [ "U030" ] # [78]
+  - parent: "U030" # Nível 2
+    children: [ "U100", "U150", "U180", "U182" ] # [30, 32, 79]
+
+  # Bloco V: DEREX (Recursos Mantidos no Exterior)
+  - parent: "V001" # Nível 1
+    children: [ "V010" ] # [80]
+  - parent: "V010" # Nível 2
+    children: [ "V020", "V030" ] # [81-83]
+  - parent: "V030" # Nível 3
+    children: [ "V100" ] # [83, 84]
+
+  # Bloco W: Declaração País-a-País (Country-by-Country Report)
+  - parent: "W001" # Nível 1
+    children: [ "W100" ] # [33, 85]
+  - parent: "W100" # Nível 2
+    children: [ "W200", "W300" ] # [33, 34, 86]
+  - parent: "W200" # Nível 3
+    children: [ "W250" ] # [34, 87]
+
+  # Bloco X: Informações Econômicas
+  - parent: "X001" # Nível 1
+    children:
+      [
+        "X280",
+        "X291",
+        "X292",
+        "X300",
+        "X310",
+        "X320",
+        "X330",
+        "X340",
+        "X360",
+        "X365",
+        "X370",
+        "X390",
+        "X400",
+        "X410",
+        "X420",
+        "X430",
+        "X450",
+        "X460",
+        "X470",
+        "X480",
+        "X485",
+        "X490",
+        "X500",
+        "X510",
+      ] # [34-40, 88]
+  - parent: "X340" # Nível 2
+    children: [ "X350", "X352", "X353", "X354", "X355", "X356", "X357" ] # [35, 89]
+  - parent: "X365" # Nível 2
+    children: [ "X366" ] # [90, 91]
+  - parent: "X370" # Nível 2
+    children: [ "X371", "X375" ] # [92-94]
+  - parent: "X450" # Nível 2
+    children: [ "X451" ] # [95, 96]
+
+  # Bloco Y: Informações Gerais
+  - parent: "Y001" # Nível 1
+    children:
+      [
+        "Y520",
+        "Y540",
+        "Y550",
+        "Y560",
+        "Y570",
+        "Y580",
+        "Y590",
+        "Y600",
+        "Y612",
+        "Y620",
+        "Y630",
+        "Y640",
+        "Y660",
+        "Y671",
+        "Y672",
+        "Y680",
+        "Y682",
+        "Y720",
+        "Y730",
+        "Y750",
+        "Y800",
+      ] # [40-45, 97]
+  - parent: "Y640" # Nível 2
+    children: [ "Y650" ] # [98, 99]
+  - parent: "Y680" # Nível 2
+    children: [ "Y681" ] # [100, 101]
+
+  # Bloco 9: Controle e Encerramento do Arquivo
+  - parent: "9001" # Nível 1
+    children: [ "9100", "9900" ] # [45, 102]
+
+ECF_0000_0010:
+  name: ECF_0000_0010
+  base_entity: "0010"
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, NOME, CNPJ, DT_INI ]
+
+    "0001":
+      source: "0001"
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: "0000"
+      fields: []
+
+    "0010":
+      source: "0010"
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: "0001"
+      fields: [ FORMA_TRIB, FORMA_TRIB_PER ]
+
+ECF_0000_L030_L100:
+  name: ECF_0000_L030_L100
+  base_entity: L030
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, NOME, CNPJ, DT_INI ]
+
+    L001:
+      source: L001
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: "0000"
+      fields: []
+
+    L030:
+      source: L030
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: L001
+      fields: [ PER_APUR, DT_FIN ]
+
+    L100:
+      source: L100
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: L030
+      fields:
+        [
+          CODIGO,
+          DESCRICAO,
+          TIPO,
+          NIVEL,
+          COD_NAT,
+          COD_CTA_SUP,
+          VAL_CTA_REF_INI,
+          IND_VAL_CTA_REF_INI,
+          VAL_CTA_REF_DEB,
+          VAL_CTA_REF_CRED,
+          VAL_CTA_REF_FIN,
+          IND_VAL_CTA_REF_FIN,
+        ]
+
+ECF_0000_L030_L300:
+  name: ECF_0000_L030_L300
+  base_entity: L030
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, NOME, CNPJ, DT_INI ]
+    L001:
+      source: L001
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: "0000"
+      fields: []
+    L030:
+      source: L030
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: L001
+      fields: [ PER_APUR, DT_FIN ]
+    L300:
+      source: "L300"
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: L030
+      fields:
+        [
+          CODIGO,
+          DESCRICAO,
+          TIPO,
+          NIVEL,
+          COD_NAT,
+          COD_CTA_SUP,
+          VALOR,
+          IND_VALOR,
+        ]
+
+ECF_0000_N030_N500:
+  name: ECF_0000_N030_N500
+  base_entity: N030
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, NOME, CNPJ, DT_INI ]
+    N001:
+      source: N001
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: "0000"
+      fields: []
+    N030:
+      source: N030
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: N001
+      fields: [ PER_APUR, DT_FIN ]
+    N500:
+      source: N500
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: N030
+      fields: [ CODIGO, DESCRICAO, TIPO, VALOR ]
+
+ECF_0000_Y570:
+  name: ECF_0000_Y570
+  base_entity: Y570
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, NOME, CNPJ, DT_INI ]
+    Y001:
+      source: Y001
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: "0000"
+      fields: []
+    Y570:
+      source: Y570
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: Y001
+      fields: [ CNPJ_FON, NOM_EMP, IND_ORG_PUB, COD_REC, VL_REND, IR_RET, CSLL_RET ]
+
+ECF_0000_M030_M300_M310:
+  name: ECF_0000_M030_M300_M310
+  base_entity: M300 # registro com maior quantidade de linhas
+  entities:
+    "0000":
+      source: "0000"
+      uid: _row_id
+      fields: [ FILE_ID, NOME, CNPJ, DT_INI ]
+    M001:                          # ← adiciona o intermediário
+      source: M001
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: "0000"
+      fields: []
+    M030:
+      source: M030
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M001
+      fields: [ DT_FIN, PER_APUR ]
+    M300:
+      source: M300
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M030
+      is_leaf: true 
+      fields: [ CODIGO, DESCRICAO, TIPO_LANCAMENTO, IND_RELACAO, VALOR, HIST_LAN_LAL ]
+    M310:
+      source: M310
+      uid: _row_id
+      parent_uid: _parent_uid_final
+      join_on: M300
+      fields: [ COD_CTA, COD_CCUS, VL_CTA, IND_VL_CTA ]
